@@ -1,0 +1,485 @@
+ {
+     "element": [{
+             "class": "keys-row",
+             "element": [{
+                     "class": "key lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-cell", "text": "Ё", "id": "Ё" }, { "class": "key-cell" }]
+                     }, {
+                         "class": "key-row",
+                         "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ё", "id": "ё" }]
+                     }]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "!", "id": "!" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "1", "id": "1" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "\"", "id": "\"" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "2", "id": "2" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "№", "id": "№" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "3", "id": "3" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": ";", "id": ";" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "4", "id": "4" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "%", "id": "%" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "5", "id": "5" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": ":", "id": ":" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "6", "id": "6" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "?", "id": "?" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "7", "id": "7" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "*", "id": "*" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "8", "id": "8" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "(", "id": "(" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "9", "id": "9" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": ")", "id": ")" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "0", "id": "0" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "_", "id": "_" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "-", "id": "-" }]
+                         }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell", "text": "+", "id": "+" }, { "class": "key-cell" }]
+                         },
+                         {
+                             "class": "key-row",
+                             "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "=", "id": "=" }]
+                         }
+                     ]
+                 }, {
+                     "class": "Backspace lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "BS", "id": "Backspace" }]
+                     }]
+                 }
+             ]
+         },
+         {
+             "class": "keys-delemiter"
+         }, {
+             "class": "keys-row",
+             "element": [{
+                     "class": "Tab lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Tab", "id": "Tab" }]
+                     }]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Й", "id": "Й" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "й", "id": "й" }] }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ц", "id": "Ц" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ц", "id": "ц" }] }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "У", "id": "У" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "у", "id": "у" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "К", "id": "К" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "к", "id": "к" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Е", "id": "Е" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "е", "id": "е" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Н", "id": "Н" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "н", "id": "н" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Г", "id": "Г" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "г", "id": "г" }] }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ш", "id": "Ш" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ш", "id": "ш" }] }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Щ", "id": "Щ" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "щ", "id": "щ" }] }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "З", "id": "З" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "з", "id": "з" }] }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Х", "id": "Х" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "х", "id": "х" }] }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ъ", "id": "Ъ" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ъ", "id": "ъ" }] }
+                     ]
+                 },
+                 {
+                     "class": "Backslash lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "/", "id": "/" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "\\", "id": "\\" }] }
+                     ]
+                 }
+             ]
+         },
+         {
+             "class": "keys-delemiter"
+         }, {
+             "class": "keys-row",
+             "element": [{
+                     "class": "CapsLock lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "CapsLock", "id": "CapsLock" }]
+                     }]
+                 },
+
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ф", "id": "Ф" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ф", "id": "ф" }] }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ы", "id": "Ы" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ы", "id": "ы" }] }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "В", "id": "В" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "в", "id": "в" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if startkey",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "А", "id": "А" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "а", "id": "а" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "П", "id": "П" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "п", "id": "п" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Р", "id": "Р" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "р", "id": "р" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if startkey",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "О", "id": "О" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "о", "id": "о" }] }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Л", "id": "Л" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "л", "id": "л" }] }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Д", "id": "Д" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "д", "id": "д" }] }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ж", "id": "Ж" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ж", "id": "ж" }] }
+                     ]
+                 },
+
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Э", "id": "Э" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "э", "id": "э" }] }
+                     ]
+                 }, {
+                     "class": "Enter lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Enter", "id": "Enter" }]
+                     }]
+                 }
+             ]
+         },
+         {
+             "class": "keys-delemiter"
+         }, {
+             "class": "keys-row",
+             "element": [{
+                     "class": "ShiftLeft lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Shift", "id": "ShiftLeft" }]
+                     }]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Я", "id": "Я" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "я", "id": "я" }] }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ч", "id": "Ч" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ч", "id": "ч" }] }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "С", "id": "С" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "с", "id": "с" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "М", "id": "М" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "м", "id": "м" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "И", "id": "И" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "и", "id": "и" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Т", "id": "Т" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "т", "id": "т" }] }
+                     ]
+                 },
+                 {
+                     "class": "key if",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ь", "id": "Ь" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ь", "id": "ь" }] }
+                     ]
+                 },
+                 {
+                     "class": "key mf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Б", "id": "Б" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "б", "id": "б" }] }
+                     ]
+                 },
+                 {
+                     "class": "key rf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": "Ю", "id": "Ю" }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": "ю", "id": "ю" }] }
+                     ]
+                 },
+                 {
+                     "class": "key lf",
+                     "element": [{ "class": "key-row", "element": [{ "class": "key-cell", "text": ",", "id": "," }, { "class": "key-cell" }] },
+                         { "class": "key-row", "element": [{ "class": "key-cell" }, { "class": "key-cell", "text": ".", "id": "." }] }
+                     ]
+                 },
+                 {
+                     "class": "ShiftRight lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Shift", "id": "ShiftRight" }]
+                     }]
+                 }
+             ]
+         },
+         {
+             "class": "keys-delemiter"
+         }, {
+             "class": "keys-row",
+             "element": [{
+                     "class": "ControlLeft lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Ctrl", "id": "ControlLeft" }]
+                     }]
+                 }, {
+                     "class": "Win lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Win", "id": "Win" }]
+                     }]
+                 }, {
+                     "class": "AltLeft tf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Alt", "id": "AltLeft" }]
+                     }]
+                 },
+                 {
+                     "class": "Space tf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": " ", "id": "Space" }]
+                     }]
+                 },
+                 {
+                     "class": "AltRight tf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Alt", "id": "AltRight" }]
+                     }]
+                 },
+                 {
+                     "class": "Win lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Win", "id": "win" }]
+                     }]
+                 },
+                 {
+                     "class": "ContextMenu lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Cntx", "id": "ContextMenu" }]
+                     }]
+                 },
+                 {
+                     "class": "ControlRight lf",
+                     "element": [{
+                         "class": "key-row",
+                         "element": [{ "class": "key-special", "text": "Ctrl", "id": "ControlRight" }]
+                     }]
+                 }
+             ]
+         }
+     ]
+ }
