@@ -1,8 +1,8 @@
 body {
     margin: 0;
-    font-family: Helvetica, sans-serif, Arial;
+    font-family: "Jura", "Exo 2", "Helvetica", "Podkova";
 }
-
+/**/
 .panel {
     width: 40.4em;
     padding: 0px 5px 0px 5px;
@@ -62,13 +62,15 @@ body {
 .keytrainer-pattern,
 .keytrainer,
 .tips,
-.panel {
+.panel,
+.infopanel {
     font-size: 100%;
 }
 
 .keytrainer-pattern,
 .keytrainer,
-.tips {
+.tips,
+.infopanel {
     width: 40.4em;
     text-align: justify;
     border-radius: 0.2em;
@@ -81,9 +83,30 @@ body {
     border: 1px solid #43a047;
 }
 
+.keytrainer {
+    border: 1px solid #43a047;
+}
+
+.infopanel {
+    border: 1px solid #43a047;
+}
+
+.timer {
+    color: #66bb6a;
+}
+
+.speed {
+    color: #66bb6a;
+}
+
+.mistakes {
+    color: #ff8a65;
+}
+
 .keytrainer-pattern,
 .keytrainer,
-.tips {
+.tips,
+.infopanel {
     font-family: Courier, monospace, 'Courier New';
     font-weight: 500;
 }
@@ -102,10 +125,6 @@ body {
 
 .keytrainer .highlighted {
     color: #9575cd;
-}
-
-.keytrainer {
-    border: 1px solid #43a047;
 }
 
 .startkey {
