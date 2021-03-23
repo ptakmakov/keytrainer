@@ -51,14 +51,14 @@ body {
     justify-content: center;
 }
 
-.keytrainer-keyboard {
+.keyboard {
     width: 40.4em;
     border: 1px solid #BDBDBD;
     border-radius: 0.2em;
     padding: 0.3em;
 }
 
-.keytrainer-keyboard,
+.keyboard,
 .keytrainer-pattern,
 .keytrainer,
 .tips,
