@@ -1,8 +1,10 @@
+import {backslash, Keyboard} from './keytrainer.keyboard.js'
 const pattern = $(".keytrainer-pattern");
 const keytrainer = $(".keytrainer");
 const timer =$(".timer");
 const speed = $(".speed")
 let ktrainer;
+
 /**
  * keyboardready event
  * @event keyboardready
@@ -14,6 +16,7 @@ document.addEventListener('keyboardready', () => ktrainer.Start());
 
 $(document).ready(
     function () {
+        backslash.value = "\\";
         ktrainer = Keytrainer();
         ktrainer.keyboard = Keyboard();
         ktrainer.keyboard.Init("/json/en.json", function(){document.dispatchEvent(keyboardready);});

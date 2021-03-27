@@ -22,7 +22,11 @@ const keyCSS = "key";
  * In other than ru or en-us layouts the backslash key can have other than \ value
  * and can be modified by outside script bofore keyboard initialized and rendered
  */
- let backslash = "\\";
+let backslash = function Backslash() {
+    return {
+        value: "\\"
+    }
+}();
 /**
  * Keyboard object
  * loads and render keyboard from json
@@ -112,8 +116,8 @@ function Key(key) {
     if (!Array.isArray(key) && key.length != 3) return null;
     const [fingerCSS, lowercaseKey, uppercaseKey] = key;
     const isSpecial = lowercaseKey.length > 1;
-    const isBackSlash = lowercaseKey === backslash;
-    let classCSS = (isSpecial || isBackSlash) ? lowercaseKey.replace(backslash, backslashCSS) : keyCSS;
+    const isBackSlash = lowercaseKey === backslash.value;
+    let classCSS = (isSpecial || isBackSlash) ? lowercaseKey.replace(backslash.value, backslashCSS) : keyCSS;
     classCSS += " " + fingerCSS;
     let keyElement = jQueryElement({ class: classCSS });
     function _Render() {
@@ -163,3 +167,4 @@ function KeySpecial(text) {
         text: text
     });
 }
+export {backslash, Keyboard}
