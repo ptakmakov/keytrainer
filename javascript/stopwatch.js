@@ -35,14 +35,17 @@ function Stopwatch(delay) {
          * @method Start Starts Stopwatch or resumes from current value
          */
         Start: function () {
-            if (_offset === 0) _init();
-            if (!_interval) _interval = setInterval(
-                () => {
-                    _current = Date.now();
-                    if (_element) _element.text((_format) ? this.ToString(_format) : this.ToString());
-                },
-                _delay
-            );
+            if (_interval) return;
+            if (!_interval) {
+                if(_offset===0) _init();
+                _interval = setInterval(
+                    () => {
+                        _current = Date.now();
+                        if (_element) _element.text((_format) ? this.ToString(_format) : this.ToString());
+                    },
+                    _delay
+                );
+            }
             if (_offset !== 0) { _start = Date.now() - _offset; _offset = 0; }
         },
         /**
@@ -67,7 +70,7 @@ function Stopwatch(delay) {
          */
         ToString: function (format) {
             let time = this.value;
-            return ((format)?format:_format)
+            return ((format) ? format : _format)
                 .replace("HH", _addZero(time.hours))
                 .replace("mm", _addZero(time.minutes))
                 .replace("ss", _addZero(time.seconds))
@@ -111,7 +114,7 @@ function Stopwatch(delay) {
          * @property {string} format [='HH:mm:ss.mi'] HH - hours, mm - minutes, ss - seconds, mi - milliseconds
          * @param {string} format HH - hours, mm - minutes, ss - seconds, mi - milliseconds
          */
-        set format(format) { _format = (format)? format: _format; }
+        set format(format) { _format = (format) ? format : _format; }
     }
 }
 export { Stopwatch }
