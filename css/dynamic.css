@@ -111,7 +111,8 @@ body {
     font-weight: 500;
 }
 
-.keytrainer-pattern .highlighted {
+.keytrainer-pattern .highlighted,
+.keytrainer .highlighted {
     color: #9575cd;
 }
 
@@ -121,10 +122,6 @@ body {
 
 .keytrainer-pattern .typed {
     color: #757575;
-}
-
-.keytrainer .highlighted {
-    color: #9575cd;
 }
 
 .startkey {

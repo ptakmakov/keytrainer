@@ -45,7 +45,7 @@ function Keyboard() {
             function (keys, i, a) {
                 let row = KeysRow().appendTo(_keyboardElement);
                 keys.forEach(
-                    function (k) {
+                    (k) => {
                         let key = Key(k);
                         key.keyElement.appendTo(row);
                         _keys.push(key);
@@ -69,7 +69,7 @@ function Keyboard() {
          */
         Init: function (src, callback) {
             _keyboardElement = $(keyboard).html("");
-            $.getJSON(src, function (data) { _Render(data); callback(); })
+            $.getJSON(src, (data) => { _Render(data); callback(); })
         }
     };
 }
