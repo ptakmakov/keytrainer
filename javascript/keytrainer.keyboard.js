@@ -5,7 +5,7 @@ const keyboard = ".keyboard";
 /**
  * HTML element used for render keyboard
  */
- const divelement = "<div/>";
+const divelement = "<div/>";
 /**
  * CSS classes, other CSS classes defined in json layout in first element of key array
  */
@@ -20,7 +20,7 @@ const backslashCSS = "Backslash";
 const keyCSS = "key";
 /**
  * In other than ru or en-us layouts the backslash key can have other than \ value
- * and can be modified by outside script bofore keyboard initialized and rendered
+ * and can be modified by outside script before keyboard initialized and rendered
  */
 let backslash = function Backslash() {
     return {
@@ -30,8 +30,12 @@ let backslash = function Backslash() {
 /**
  * Keyboard object
  * loads and render keyboard from json
- * @object 
+ * @typedef Keyboard
  * @returns {Object} Keyboard object
+ * @method Init() get json, start render
+ * @param {string} src json url
+ * @param {function} callback function called after render completed
+ * @property {array} keys array of Key objects @see Key
  */
 function Keyboard() {
     let _keys = [];
@@ -57,7 +61,7 @@ function Keyboard() {
          * @returns {Array[{Object}...]} Returns array of objects type of Key
          */
         keys: _keys,
-        
+
         /**
          * 
          * @param {string} src URL to json keyboard array[keyboard rows array[keyboard keys array[]]]
@@ -126,10 +130,14 @@ function Key(key) {
         } else {
             keyElement
                 .append(
-                    KeyRow().append(KeyCell(uppercaseKey)).append(KeyCell())
+                    KeyRow()
+                        .append(KeyCell(uppercaseKey))
+                        .append(KeyCell())
                 )
                 .append(
-                    KeyRow().append(KeyCell()).append(KeyCell(lowercaseKey))
+                    KeyRow()
+                        .append(KeyCell())
+                        .append(KeyCell(lowercaseKey))
                 );
         }
     } _Render();
@@ -167,4 +175,4 @@ function KeySpecial(text) {
         text: text
     });
 }
-export {backslash, Keyboard}
+export { backslash, Keyboard }

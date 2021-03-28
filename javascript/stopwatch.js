@@ -93,3 +93,4 @@ function Stopwatch(delay) {
         }
     }
 }
+export { Stopwatch }

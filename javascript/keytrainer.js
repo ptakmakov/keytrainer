@@ -1,9 +1,11 @@
-import {backslash, Keyboard} from './keytrainer.keyboard.js'
-const pattern = $(".keytrainer-pattern");
-const keytrainer = $(".keytrainer");
-const timer =$(".timer");
-const speed = $(".speed")
-let ktrainer;
+import { backslash, Keyboard } from './keytrainer.keyboard.js'
+import { Stopwatch } from './stopwatch.js'
+const pattern = ".keytrainer-pattern";
+const keytrainerInput = ".keytrainer";
+const timer = ".timer";
+const speed = ".speed";
+
+let keytrainer;
 
 /**
  * keyboardready event
@@ -12,23 +14,27 @@ let ktrainer;
  */
 const keyboardready = document.createEvent('Event');
 keyboardready.initEvent('keyboardready', true, true);
-document.addEventListener('keyboardready', () => ktrainer.Start());
+document.addEventListener('keyboardready', () => keytrainer.Start());
 
 $(document).ready(
     function () {
         backslash.value = "\\";
-        ktrainer = Keytrainer();
-        ktrainer.keyboard = Keyboard();
-        ktrainer.keyboard.Init("/json/en.json", function(){document.dispatchEvent(keyboardready);});
+        //keytrainer = Keytrainer();
+        //dev
+        keytrainer = window.keytrainer = Keytrainer();
+        keytrainer.keyboard = Keyboard();
+        keytrainer.keyboard.Init("/json/en.json", function () { document.dispatchEvent(keyboardready); });
+        keytrainer.stopwatch = Stopwatch();
     }
 );
 function Keytrainer() {
     return {
-        pattern: pattern,
-        keytrainer: keytrainer,
-        timer: timer,
-        speed: speed,
+        pattern: $(pattern),
+        keytrainer: $(keytrainerInput),
+        timer: $(timer),
+        speed: $(speed),
         keyboard: null,
+        stopwatch: null,
         keys: null,
         Start: function () {
             this.keys = this.keyboard.keys;
