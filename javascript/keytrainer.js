@@ -23,8 +23,10 @@ $(document).ready(
         //dev
         keytrainer = window.keytrainer = Keytrainer();
         keytrainer.keyboard = Keyboard();
-        keytrainer.keyboard.Init("/json/en.json", function () { document.dispatchEvent(keyboardready); });
+        keytrainer.keyboard.Init("/json/en.json", () => document.dispatchEvent(keyboardready));
         keytrainer.stopwatch = Stopwatch();
+        keytrainer.stopwatch.format = "mm:ss";
+        keytrainer.stopwatch.element = keytrainer.timer;
     }
 );
 function Keytrainer() {
