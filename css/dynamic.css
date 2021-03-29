@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: "Jura", "Exo 2", "Helvetica", "Podkova";
+    font-family: "Jura", "Exo 2", "Helvetica";
 }
 /**/
 .panel {
@@ -111,7 +111,8 @@ body {
     font-weight: 500;
 }
 
-.keytrainer-pattern .highlighted {
+.keytrainer-pattern .highlighted,
+.keytrainer .highlighted {
     color: #9575cd;
 }
 
@@ -121,10 +122,6 @@ body {
 
 .keytrainer-pattern .typed {
     color: #757575;
-}
-
-.keytrainer .highlighted {
-    color: #9575cd;
 }
 
 .startkey {
@@ -273,7 +270,7 @@ div[class~=Backslash] .key-row {
     text-align: center;
 }
 
-.keys-delemiter {
+.keys-delimiter {
     height: 0.3em;
 }
 
