@@ -50,7 +50,7 @@ function Stopwatch(delay) {
                     () => {
                         _current = Date.now();
                         if (_timerElement) _timerElement.text((_format) ? this.ToString(_format) : this.ToString());
-                        if (_speedElement) _speedElement.text(this.SpeedPerMinute(_quantity));
+                        if (_speedElement) _speedElement.text(_addZero(this.SpeedPerMinute(_quantity), 4));
                     },
                     _delay,
                 );
@@ -63,7 +63,7 @@ function Stopwatch(delay) {
         Stop: function () {
             if (_interval) clearInterval(_interval);
             _interval = null;
-            _offset = this.value.time;
+            _offset = _time();
         },
         /**
          * @method ToString
@@ -90,7 +90,7 @@ function Stopwatch(delay) {
          * @param {Number} quantity 
          * @returns {Number} Quantity of whatever per second, rounded to 3 decimal places
          */
-         SpeedPerSecond: function (quantity) {
+        SpeedPerSecond: function (quantity) {
             let time = _time();
             return (time != 0) ? _round(quantity * 1000 / _time(), 1000) : 0;
         },
