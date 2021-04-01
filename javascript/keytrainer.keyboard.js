@@ -1,21 +1,21 @@
 /**
  * Document elements selectors
  */
-const keyboard = ".keyboard";
+const keyboardSelector = ".keyboard";
 /**
  * HTML element used for render keyboard
  */
-const divelement = "<div/>";
+const divElement = "<div/>";
 /**
  * CSS classes, other CSS classes defined in json layout in first element of key array
  */
-const keysrow = "keys-row";
-const keysrowsdelimiter = "keys-delimiter";
-const highlighted = "highlighted";
-const keyrow = "key-row";
-const keycell = "key-cell";
-const keyspecial = "key-special";
-const fingerdown = "-d";
+const keysrowCSS = "keys-row";
+const keysrowsDelimiterCSS = "keys-delimiter";
+const highlightedCSS = "highlighted";
+const keyrowCSS = "key-row";
+const keycellCSS = "key-cell";
+const keyspecialCSS = "key-special";
+const fingerdownCSS = "-d";
 const backslashCSS = "Backslash";
 const keyCSS = "key";
 /**
@@ -68,7 +68,7 @@ function Keyboard() {
          * @param {callback} callback any callback function
          */
         Init: function (src, callback) {
-            _keyboardElement = $(keyboard).html("");
+            _keyboardElement = $(keyboardSelector).html("");
             $.getJSON(src, (data) => { _Render(data); callback(); })
         }
     };
@@ -80,7 +80,7 @@ function Keyboard() {
  * @returns {object} JQuery object <div/> with or without attributes
  */
 function jQueryElement(o) {
-    return $(divelement, o);
+    return $(divElement, o);
 }
 /**
  * Keyboard KeysRow
@@ -88,7 +88,7 @@ function jQueryElement(o) {
  */
 function KeysRow() {
     return jQueryElement({
-        class: keysrow
+        class: keysrowCSS
     });
 }
 /**
@@ -97,7 +97,7 @@ function KeysRow() {
  */
 function Delimiter() {
     return jQueryElement({
-        class: keysrowsdelimiter
+        class: keysrowsDelimiterCSS
     });
 }
 /**
@@ -107,8 +107,8 @@ function Delimiter() {
  * Array with key information ["Class for finger", "Character | SpecialKeySystemName", "UppercaseCharacter | SpecialKeyTitle"]
  * @method Toogle() Toggles classes between Key up and Key down
  * @method Highlight() Switches Key between highlighted and regular
- * @property {string} character Key lowercase character
- * @property {string} uppercase Key uppercase character
+ * @property {string} lowercaseKey Key lowercase character
+ * @property {string} uppercaseKey Key uppercase character
  * @property {string} classCSS CSS class of Key
  * @property {string} fingerCSS CSS class of Key for one of the finger(thumb, index, middle, ring, little)
  * @property {string} fingerDownCSS CSS class of Key for one of the fingers for pressed key
@@ -142,36 +142,38 @@ function Key(key) {
         }
     } _Render();
     return {
-        Toogle: function () {
+        Toggle: function () {
             this.keyElement.toggleClass(this.fingerCSS).toggleClass(this.fingerDownCSS);
+            this.isDown = !this.isDown;
         },
         Highlight: function () {
-            this.keyElement.toggleClass(highlighted);
+            this.keyElement.toggleClass(highlightedCSS);
         },
-        character: lowercaseKey,
-        uppercase: uppercaseKey,
+        lowercaseKey: lowercaseKey,
+        uppercaseKey: uppercaseKey,
         class: classCSS,
         fingerCSS: fingerCSS,
-        fingerDownCSS: fingerCSS + fingerdown,
+        fingerDownCSS: fingerCSS + fingerdownCSS,
         isBackSlash: isBackSlash,
         isSpecial: isSpecial,
-        keyElement: keyElement
+        keyElement: keyElement,
+        isDown: false
     };
 }
 function KeyRow() {
     return jQueryElement({
-        class: keyrow
+        class: keyrowCSS
     });
 }
 function KeyCell(text) {
     return jQueryElement({
-        class: keycell,
+        class: keycellCSS,
         text: text
     });
 }
 function KeySpecial(text) {
     return jQueryElement({
-        class: keyspecial,
+        class: keyspecialCSS,
         text: text
     });
 }
