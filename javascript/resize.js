@@ -1,14 +1,14 @@
 /**
  * Document elements selectors
  */
-const bodySelector = "body";
+const bodySelector = 'body';
 /**
  * Set width ratio for size scaling
  * @property {Number} widthRatio
  * @return {Object}
  * @property {Number} value
  */
-let widthRatio = () => { return { value: 6.5 }; }
+const widthRatio = () => ({ value: 6.5 });
 
 let resizeTimeout;
 let initialFontSize;
@@ -17,17 +17,18 @@ let initialFontSize;
  * size depends from document.body font size in percents
  * @param {Number} size window.innerWidth by default
  */
-function Resize(size) {
-    let r = widthRatio.value;
-    if (!initialFontSize) initialFontSize = $(bodySelector).css("font-size");
-    size = size / r;
+function resize(size) {
+    const r = widthRatio.value;
+    // eslint-disable-next-line no-undef
+    if (!initialFontSize) initialFontSize = $(bodySelector).css('font-size');
+    const aspect = size / r;
     if (resizeTimeout) clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() =>
-        $(bodySelector).css("font-size",
-            ((size > r * 20) ?
-                r * 20 :
-                (size <= r * 10) ?
-                    r * 10 : size) + "%"
-        ), 12);
+    // eslint-disable-next-line no-undef
+    resizeTimeout = setTimeout(() => $(bodySelector).css('font-size',
+        () => {
+            if (aspect > r * 20) return `${r * 20}%`;
+            if (aspect <= r * 10) return `${r * 10}%`;
+            return `${aspect}%`;
+        }, 12));
 }
-export { Resize, widthRatio }
+export { resize, widthRatio };
