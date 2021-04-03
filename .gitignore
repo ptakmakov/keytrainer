@@ -1,1 +1,4 @@
 *.vscode*
+*.eslintrc*
+/jquery*
+/node_modules*
