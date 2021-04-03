@@ -11,11 +11,14 @@ const patternSelector = '.keytrainer-pattern';
 const keytrainerSelector = '.keytrainer';
 const timerSelector = '.timer';
 const speedSelector = '.speed';
+const mistakesSelector = '.mistakes';
 /**
  * CSS classes, other CSS classes defined in json layout in first element of key array
  */
 const highlightedCSS = 'highlighted';
 const typeCSS = 'type';
+const typedCSS = 'typed';
+const etextCSS = 'e-text-c';
 /**
 * Default URLs
 */
@@ -41,19 +44,19 @@ $(document).ready(
     () => {
         backslash.value = '\\';
         // prod
-        // keytrainer = Keytrainer();
+        // keytrainer = new Keytrainer();
         // dev
         // eslint-disable-next-line no-use-before-define
         window.keytrainer = new Keytrainer();
         keytrainer = window.keytrainer;
         keytrainer.keyboard = new Keyboard();
         keytrainer.keyboard.init(layoutJSON, () => document.dispatchEvent(keyboardready));
-        keytrainer.getPattern(patternJSON, () => document.dispatchEvent(patternready));
         keytrainer.stopwatch = new Stopwatch();
         keytrainer.stopwatch.delay = 5;
         keytrainer.stopwatch.format = 'mm:ss';
         keytrainer.stopwatch.timerElement = keytrainer.timerElement;
         keytrainer.stopwatch.speedElement = keytrainer.speedElement;
+        keytrainer.getPattern(patternJSON, () => document.dispatchEvent(patternready));
         widthRatio.value = 6.5;
         resize(window.innerWidth);
     },
@@ -61,6 +64,8 @@ $(document).ready(
 
 function Keytrainer() {
     const preventDefault = true;
+    let mistakes = 0;
+    let stopwatchStarted = false;
     return {
         // eslint-disable-next-line no-undef
         patternElement: $(patternSelector),
@@ -70,20 +75,78 @@ function Keytrainer() {
         timerElement: $(timerSelector),
         // eslint-disable-next-line no-undef
         speedElement: $(speedSelector),
+        // eslint-disable-next-line no-undef
+        mistakesElement: $(mistakesSelector),
         keyboard: null,
         stopwatch: null,
         keys: [],
         pattern: [],
         position: 0,
-        keyDown(key) {
+        startStopwatch() {
+            if (!stopwatchStarted) {
+                this.stopwatch.reset();
+                this.stopwatch.start();
+                this.stopwatch.quantity = 0;
+                stopwatchStarted = true;
+            }
+            this.stopwatch.quantity += 1;
+        },
+        renderCurrentChar(input) {
+            const patternItem = this.pattern[this.position];
+
+            patternItem.charElement
+                .toggleClass(highlightedCSS)
+                .toggleClass(typedCSS);
+            if (patternItem.char === ' ') patternItem.charElement.text(' ');
+
+            patternItem.input = input;
+            patternItem.inputElement
+                .text(input)
+                .toggleClass(highlightedCSS);
+
+            if (input !== patternItem.char) {
+                patternItem.inputElement.toggleClass(etextCSS);
+                mistakes += 1;
+                this.mistakesElement.html(String(mistakes).padStart(2, '0'));
+            }
+        },
+        renderNextChar() {
+            const patternItem = this.pattern[this.position];
+
+            if (patternItem.char === ' ') {
+                patternItem.inputElement.text('_');
+                patternItem.charElement.text('_');
+            } else {
+                patternItem.inputElement.text(patternItem.char);
+            }
+            patternItem.inputElement.toggleClass(highlightedCSS);
+            patternItem.charElement
+                .toggleClass(highlightedCSS)
+                .toggleClass(typeCSS);
+        },
+        keyDown(key, input) {
             if (!key.isDown) {
-                key.Toggle();
+                if (this.position < this.pattern.length) {
+                    this.startStopwatch();
+                    if (!key.isSpecial || key.lowercaseKey === 'Space') {
+                        this.renderCurrentChar(input);
+                        this.position += 1;
+                        if (this.position < this.pattern.length) this.renderNextChar();
+                        else this.stopwatch.stop();
+                    }
+                }
+                key.toggleKey();
             }
         },
         keyUp(key) {
             if (key.isDown) {
-                key.Toggle();
+                key.toggleKey();
             }
+        },
+        freeKeys() {
+            this.keys
+                .filter((v) => v.isDown)
+                .forEach((v) => v.toggleKey());
         },
         /**
          * Tracks events keydown, keypress, keyup
@@ -95,7 +158,7 @@ function Keytrainer() {
             const key = this.findKey(e.key, e.code);
             if (!key) return;
             switch (e.type) {
-            case 'keydown': this.keyDown(key);
+            case 'keydown': this.keyDown(key, e.key);
                 break;
             case 'keyup': this.keyUp(key);
                 break;
@@ -113,6 +176,9 @@ function Keytrainer() {
             this.position = 0;
             this.patternElement.html('');
             this.keytrainerElement.html('');
+            this.mistakesElement.html('00');
+            this.stopwatch.stop();
+            stopwatchStarted = false;
             // eslint-disable-next-line no-undef
             $.getJSON(src, (data) => {
                 this.pattern = Array.from(data.pattern).map((c, i) => {
@@ -152,4 +218,6 @@ document.addEventListener('patternready', () => {
     $(window).on('keypress keydown keyup', (e) => { keytrainer.trackKey(e); });
     // eslint-disable-next-line no-undef
     $(window).on('resize', () => resize(window.innerWidth));
+    // eslint-disable-next-line no-undef
+    $(window).on('blur', () => keytrainer.freeKeys());
 });

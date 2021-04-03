@@ -119,11 +119,11 @@ function Key(key) {
         }
     } render();
     return {
-        Toggle() {
+        toggleKey() {
             this.keyElement.toggleClass(this.fingerCSS).toggleClass(this.fingerDownCSS);
             this.isDown = !this.isDown;
         },
-        Highlight() {
+        highlightKey() {
             this.keyElement.toggleClass(highlightedCSS);
         },
         lowercaseKey,

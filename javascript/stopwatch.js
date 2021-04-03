@@ -160,6 +160,11 @@ function Stopwatch(delay = 10) {
          */
         set quantity(number) { quantityOfWhatever = number; },
         /**
+         * Get current quantity of whatever, for example - symbols
+         * @property {Number} quantity
+         */
+        get quantity() { return quantityOfWhatever; },
+        /**
          * Reset default format for Stopwatch text view
          * @property {string} format [='HH:mm:ss.mi']
          * HH - hours, mm - minutes, ss - seconds, mi - milliseconds
