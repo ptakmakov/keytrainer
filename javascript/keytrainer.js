@@ -105,7 +105,7 @@ function Keytrainer() {
         },
         renderCurrentChar(input) {
             const patternItem = this.pattern[this.position];
-
+            this.findKey(patternItem.char).highlightKey();
             patternItem.charElement
                 .toggleClass(highlightedCSS)
                 .toggleClass(typedCSS);
@@ -125,6 +125,7 @@ function Keytrainer() {
         renderNextChar() {
             const patternItem = this.pattern[this.position];
 
+            this.findKey(patternItem.char).highlightKey();
             if (patternItem.char === ' ') {
                 patternItem.inputElement.text('_');
                 patternItem.charElement.text('_');
@@ -147,9 +148,13 @@ function Keytrainer() {
                         else {
                             this.stopwatch.stop();
                             this.renderTip(tipNewphrase);
+                            this.findKey(' ').highlightKey();
                         }
                     }
-                } else if (input === ' ') this.getPattern(patternJSON, () => this.renderTip());
+                } else if (input === ' ') {
+                    this.getPattern(patternJSON, () => this.renderTip());
+                    this.findKey(' ').highlightKey();
+                }
                 key.toggleKey();
             }
         },
@@ -194,6 +199,7 @@ function Keytrainer() {
             $.getJSON(src, (data) => {
                 this.pattern = Array.from(data.pattern).map((c, i) => {
                     const isFirst = i === 0;
+                    if (isFirst) this.findKey(c).highlightKey();
                     return {
                         char: c,
                         input: null,
@@ -231,7 +237,7 @@ function Keytrainer() {
         },
         findKey(key, keyCode) {
             return this.keys.filter(
-                (k) => ((k.isSpecial)
+                (k) => ((k.isSpecial && key !== ' ')
                     ? k.lowercaseKey === keyCode
                     : k.lowercaseKey === key || k.uppercaseKey === key),
             )[0];
