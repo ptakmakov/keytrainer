@@ -11,7 +11,8 @@ const patternSelector = '.keytrainer-pattern';
 const keytrainerSelector = '.keytrainer';
 const timerSelector = '.timer';
 const speedSelector = '.speed';
-const mistakesSelector = '.mistakes';
+const missprintsSelector = '.missprints';
+const tipsSelector = '.tips';
 /**
  * CSS classes, other CSS classes defined in json layout in first element of key array
  */
@@ -23,7 +24,14 @@ const etextCSS = 'e-text-c';
 * Default URLs
 */
 const layoutJSON = '/json/en.json';
+const tipsJSON = '/json/en.tips.json';
 const patternJSON = '/node/pattern.js';
+/**
+ * Tips identificators
+ */
+const tipNewphrase = 'newphrase';
+const tipMissprint = 'missprint';
+const tipRandom = 'random';
 /**
  * keyboardready event
  * @event keyboardready
@@ -56,6 +64,7 @@ $(document).ready(
         keytrainer.stopwatch.format = 'mm:ss';
         keytrainer.stopwatch.timerElement = keytrainer.timerElement;
         keytrainer.stopwatch.speedElement = keytrainer.speedElement;
+        keytrainer.getTips(tipsJSON, () => keytrainer.renderTip());
         keytrainer.getPattern(patternJSON, () => document.dispatchEvent(patternready));
         widthRatio.value = 6.5;
         resize(window.innerWidth);
@@ -64,7 +73,7 @@ $(document).ready(
 
 function Keytrainer() {
     const preventDefault = true;
-    let mistakes = 0;
+    let missprints = 0;
     let stopwatchStarted = false;
     return {
         // eslint-disable-next-line no-undef
@@ -76,12 +85,15 @@ function Keytrainer() {
         // eslint-disable-next-line no-undef
         speedElement: $(speedSelector),
         // eslint-disable-next-line no-undef
-        mistakesElement: $(mistakesSelector),
+        missprintsElement: $(missprintsSelector),
+        // eslint-disable-next-line no-undef
+        tipsElement: $(tipsSelector),
         keyboard: null,
         stopwatch: null,
         keys: [],
         pattern: [],
         position: 0,
+        tips: null,
         startStopwatch() {
             if (!stopwatchStarted) {
                 this.stopwatch.reset();
@@ -106,8 +118,8 @@ function Keytrainer() {
 
             if (input !== patternItem.char) {
                 patternItem.inputElement.toggleClass(etextCSS);
-                mistakes += 1;
-                this.mistakesElement.html(String(mistakes).padStart(2, '0'));
+                missprints += 1;
+                this.missprintsElement.html(String(missprints).padStart(2, '0'));
             }
         },
         renderNextChar() {
@@ -132,9 +144,12 @@ function Keytrainer() {
                         this.renderCurrentChar(input);
                         this.position += 1;
                         if (this.position < this.pattern.length) this.renderNextChar();
-                        else this.stopwatch.stop();
+                        else {
+                            this.stopwatch.stop();
+                            this.renderTip(tipNewphrase);
+                        }
                     }
-                }
+                } else if (input === ' ') this.getPattern(patternJSON, () => this.renderTip());
                 key.toggleKey();
             }
         },
@@ -157,14 +172,8 @@ function Keytrainer() {
             if (this.preventDefault) e.preventDefault();
             const key = this.findKey(e.key, e.code);
             if (!key) return;
-            switch (e.type) {
-            case 'keydown': this.keyDown(key, e.key);
-                break;
-            case 'keyup': this.keyUp(key);
-                break;
-            default:
-                break;
-            }
+            if (e.type === 'keydown') this.keyDown(key, e.key);
+            if (e.type === 'keyup') this.keyUp(key);
         },
         /**
          * Get JSON from url and create pattern and keytrainer HTML elements
@@ -176,7 +185,9 @@ function Keytrainer() {
             this.position = 0;
             this.patternElement.html('');
             this.keytrainerElement.html('');
-            this.mistakesElement.html('00');
+            this.missprintsElement.html('00');
+            this.renderTip();
+            missprints = 0;
             this.stopwatch.stop();
             stopwatchStarted = false;
             // eslint-disable-next-line no-undef
@@ -200,6 +211,23 @@ function Keytrainer() {
                 });
                 callback();
             });
+        },
+        getTips(src, callback) {
+            // eslint-disable-next-line no-undef
+            $.getJSON(src, (data) => {
+                this.tips = data;
+                callback();
+            });
+        },
+        renderTip(identifier) {
+            if (!this.tips) return;
+            this.tipsElement.removeClass(etextCSS);
+            if (!identifier) {
+                const tips = this.tips[tipRandom];
+                this.tipsElement.html(tips[Math.random() * tips.length | 0]);
+            }
+            if (identifier) this.tipsElement.html(this.tips[identifier]);
+            if (identifier === tipMissprint) this.tipsElement.addClass(etextCSS);
         },
         findKey(key, keyCode) {
             return this.keys.filter(
