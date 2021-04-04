@@ -105,6 +105,7 @@ function Keytrainer() {
         },
         renderCurrentChar(input) {
             const patternItem = this.pattern[this.position];
+
             this.findKey(patternItem.char).highlightKey();
             patternItem.charElement
                 .toggleClass(highlightedCSS)
@@ -126,12 +127,14 @@ function Keytrainer() {
             const patternItem = this.pattern[this.position];
 
             this.findKey(patternItem.char).highlightKey();
+
             if (patternItem.char === ' ') {
                 patternItem.inputElement.text('_');
                 patternItem.charElement.text('_');
             } else {
                 patternItem.inputElement.text(patternItem.char);
             }
+
             patternItem.inputElement.toggleClass(highlightedCSS);
             patternItem.charElement
                 .toggleClass(highlightedCSS)
@@ -141,9 +144,11 @@ function Keytrainer() {
             if (!key.isDown) {
                 if (this.position < this.pattern.length) {
                     this.startStopwatch();
+
                     if (!key.isSpecial || key.lowercaseKey === 'Space') {
                         this.renderCurrentChar(input);
                         this.position += 1;
+
                         if (this.position < this.pattern.length) this.renderNextChar();
                         else {
                             this.stopwatch.stop();
