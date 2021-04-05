@@ -1,11 +1,11 @@
 {
-    "newphrase": "Press space key for a new phrase",
-    "missprint": "Missprint?! Nevermind continue typing",
+    "newphrase": "Press the space bar to update the phrase",
+    "missprint": "Typo?! Never mind continue typing",
     "random": [
         "Don't look at the keyboard while typing",
         "Your typing speed will grow with practice",
         "Keys for index fingers highlighted by a border",
         "More practice - less mistakes",
-        "Next key to type highlighted"
+        "The next key to press is highlighted"
     ]
 }
