@@ -47,6 +47,24 @@ keyboardready.initEvent('keyboardready', true, true);
 const patternready = document.createEvent('Event');
 patternready.initEvent('patternready', true, true);
 
+document.addEventListener('keyboardready', () => {
+    keytrainer.keys = keytrainer.keyboard.keys;
+    keytrainer.stopwatch = new Stopwatch();
+    keytrainer.stopwatch.delay = 5;
+    keytrainer.stopwatch.format = 'mm:ss';
+    keytrainer.stopwatch.stopwatchElement = keytrainer.stopwatchElement;
+    keytrainer.stopwatch.speedmeterElement = keytrainer.speedmeterElement;
+    keytrainer.getTips(tipsJSON, () => keytrainer.renderTip());
+    keytrainer.getPattern(patternJSON, () => document.dispatchEvent(patternready));
+});
+document.addEventListener('patternready', () => {
+    // eslint-disable-next-line no-undef
+    $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
+    // eslint-disable-next-line no-undef
+    $(window).on('resize', () => resize(window.innerWidth));
+    // eslint-disable-next-line no-undef
+    $(window).on('blur', () => keytrainer.freeKeys());
+});
 // eslint-disable-next-line no-undef
 $(document).ready(
     () => {
@@ -59,13 +77,6 @@ $(document).ready(
         keytrainer = window.keytrainer;
         keytrainer.keyboard = new Keyboard();
         keytrainer.keyboard.init(layoutJSON, () => document.dispatchEvent(keyboardready));
-        keytrainer.stopwatch = new Stopwatch();
-        keytrainer.stopwatch.delay = 5;
-        keytrainer.stopwatch.format = 'mm:ss';
-        keytrainer.stopwatch.stopwatchElement = keytrainer.stopwatchElement;
-        keytrainer.stopwatch.speedmeterElement = keytrainer.speedmeterElement;
-        keytrainer.getTips(tipsJSON, () => keytrainer.renderTip());
-        keytrainer.getPattern(patternJSON, () => document.dispatchEvent(patternready));
         widthRatio.value = 6.5;
         resize(window.innerWidth);
     },
@@ -131,12 +142,12 @@ function Keytrainer() {
          * Keyboard keys
          * @property {Array({objects})} keys @see Keyboard.keys
          */
-        keys: [],
+        keys: null,
         /**
          * Keytrainer pattern
          * @property {Array{objects}} pattern
          */
-        pattern: [],
+        pattern: null,
         /**
          * Current position of pattern last typed symbol
          * @property {number} position
@@ -350,22 +361,15 @@ function Keytrainer() {
          * @returns {object} Returns keyboard key object @see {Key}
          */
         findKey(char, keyCode) {
-            return this.keys.filter(
-                (k) => ((k.isSpecial && char !== ' ')
-                    ? k.lowercaseKey === keyCode
-                    : k.lowercaseKey === char || k.uppercaseKey === char),
-            )[0];
+            if (this.keys) {
+                return this.keys.filter(
+                    (k) => ((k.isSpecial && char !== ' ')
+                        ? k.lowercaseKey === keyCode
+                        : k.lowercaseKey === char || k.uppercaseKey === char),
+                )[0];
+            }
+            return null;
         },
         get preventDefault() { return preventDefault; },
     };
 }
-
-document.addEventListener('keyboardready', () => { keytrainer.keys = keytrainer.keyboard.keys; });
-document.addEventListener('patternready', () => {
-    // eslint-disable-next-line no-undef
-    $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
-    // eslint-disable-next-line no-undef
-    $(window).on('resize', () => resize(window.innerWidth));
-    // eslint-disable-next-line no-undef
-    $(window).on('blur', () => keytrainer.freeKeys());
-});

@@ -1,7 +1,22 @@
 [
-[["lf","`","~"],["lf","1","!"],["rf","2","@"],["mf","3","#"],["if","4","$"],["if","5","%"],["if","6","^"],["if","7","&"],["mf","8","*"],["rf","9","("],["lf", "0",")"],["lf", "-","_"],["lf", "=","+"],["lf", "Backspace","BS"]],
-[["lf","Tab","Tab"],["lf","q","Q"],["rf","w","W"],["mf","e","E"],["if","r","R"],["if","t","T"],["if","y","Y"],["if","u","U"],["mf","i","I"],["rf","o","O"],["lf", "p","P"],["lf", "[","{"],["lf", "]","}"],["lf", "\\","|"]],
-[["lf","CapsLock","CapsLock"],["lf","a","A"],["rf","s","S"],["mf","d","D"],["startkey if","f","F"],["if","g","G"],["if","h","H"],["startkey if","j","J"],["mf","k","K"],["rf","l","L"],["lf", ";",":"],["lf", "'","\""],["lf", "Enter","Enter"]],
-[["lf","ShiftLeft","Shift"],["lf","z","Z"],["rf","x","X"],["mf","c","C"],["if","v","V"],["if","b","B"],["if","n","N"],["if","m","M"],["mf",",","<"],["rf",".",">"],["lf", "/","?"],["lf", "ShiftRight","Shift"]],
-[["lf", "ControlLeft","Ctrl"],["lf", "Win","Win"],["tf","AltLeft","Alt"],["tf","Space"," "],["tf","AltRight","Alt"],["lf", "Win","Win"],["lf", "ContextMenu","Cntx"],["lf", "ControlRight","Ctrl"]]
+[
+    ["lf","`","~"],["lf","1","!"],["rf","2","@"],["mf","3","#"],["if","4","$"],["if","5","%"],
+    ["if","6","^"],["if","7","&"],["mf","8","*"],["rf","9","("],["lf", "0",")"],["lf", "-","_"],
+    ["lf", "=","+"],["lf", "Backspace","BS"]],
+[
+    ["lf","Tab","Tab"],["lf","q","Q"],["rf","w","W"],["mf","e","E"],["if","r","R"],["if","t","T"],
+    ["if","y","Y"],["if","u","U"],["mf","i","I"],["rf","o","O"],["lf", "p","P"],["lf", "[","{"],
+    ["lf", "]","}"],["lf", "\\","|"]],
+[
+    ["lf","CapsLock","CapsLock"],["lf","a","A"],["rf","s","S"],["mf","d","D"],
+    ["startkey if","f","F"],["if","g","G"],["if","h","H"],["startkey if","j","J"],["mf","k","K"],
+    ["rf","l","L"],["lf", ";",":"],["lf", "'","\""],["lf", "Enter","Enter"]],
+[
+    ["lf","ShiftLeft","Shift"],["lf","z","Z"],["rf","x","X"],["mf","c","C"],["if","v","V"],
+    ["if","b","B"],["if","n","N"],["if","m","M"],["mf",",","<"],["rf",".",">"],["lf", "/","?"],
+    ["lf", "ShiftRight","Shift"]],
+[
+    ["lf", "ControlLeft","Ctrl"],["lf", "Win","Win"],["tf","AltLeft","Alt"],["tf","Space"," "],
+    ["tf","AltRight","Alt"],["lf", "Win","Win"],["lf", "ContextMenu","Cntx"],
+    ["lf", "ControlRight","Ctrl"]]
 ]
