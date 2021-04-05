@@ -9,8 +9,8 @@ function Stopwatch(delay = 10) {
     let updateInterval;
     let updateDelay = delay;
     let pauseOffset = 0;
-    let $timerElement = null;
-    let $speedElement = null;
+    let $stopwatchElement = null;
+    let $speedmeterElement = null;
     let defaultFormat = 'HH:mm:ss.mi';
     let quantityOfWhatever = 0;
     function padNum(i, length = 2) {
@@ -47,15 +47,16 @@ function Stopwatch(delay = 10) {
                 updateInterval = setInterval(
                     () => {
                         currentTime = Date.now();
-                        if ($timerElement) {
-                            $timerElement.text(
+                        if ($stopwatchElement) {
+                            $stopwatchElement.text(
                                 (defaultFormat)
                                     ? this.toString(defaultFormat)
                                     : this.toString(),
                             );
                         }
-                        if ($speedElement) {
-                            $speedElement.text(padNum(this.speedPerMinute(quantityOfWhatever), 4));
+                        if ($speedmeterElement) {
+                            $speedmeterElement
+                                .text(padNum(this.speedPerMinute(quantityOfWhatever), 4));
                         }
                     },
                     updateDelay,
@@ -141,18 +142,18 @@ function Stopwatch(delay = 10) {
         /**
          * Set jQuery element for text view of Stopwatch
          * @see {format} @see {ToString}
-         * @property {Object} timerElement [=jQuery element]
+         * @property {Object} stopwatchElement [=jQuery element]
          * If set update element text after stopwatch start
          * @param {Object} element jQuery element
          */
-        set timerElement(element) { $timerElement = element; },
+        set stopwatchElement(element) { $stopwatchElement = element; },
         /**
          * Set jQuery element for text view of Stopwatch calculated speed of whatever per minute
-         * @property {Object} speedElement [=jQuery element]
-         * If set update element text after stopwatch start
+         * @property {Object} speedmeterElement [=jQuery element]
+         * If set updates element text after stopwatch start
          * @param {Object} element jQuery element
          */
-        set speedElement(element) { $speedElement = element; },
+        set speedmeterElement(element) { $speedmeterElement = element; },
         /**
          * Set current quantity of whatever, for example - symbols
          * @property {Number} quantity
