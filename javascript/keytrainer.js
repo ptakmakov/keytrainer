@@ -1,4 +1,4 @@
-/* eslint-disable import/extensions */
+/* eslint-disable import/extensions, no-undef */
 import { backslash, Keyboard } from './keytrainer.keyboard.js';
 import Stopwatch from './stopwatch.js';
 import { resize, widthRatio } from './resize.js';
@@ -7,6 +7,7 @@ let keytrainer;
 /**
  * Document elements selectors
  */
+const keyboardSelector = '.keyboard';
 const patternSelector = '.keytrainer-pattern';
 const keytrainerSelector = '.keytrainer';
 const stopwatchSelector = '.stopwatch';
@@ -32,6 +33,7 @@ const patternJSON = '/node/pattern.js';
 const tipNewphrase = 'newphrase';
 const tipMissprint = 'missprint';
 const tipRandom = 'random';
+
 /**
  * keyboardready event
  * @event keyboardready
@@ -47,6 +49,11 @@ keyboardready.initEvent('keyboardready', true, true);
 const patternready = document.createEvent('Event');
 patternready.initEvent('patternready', true, true);
 
+document.addEventListener('patternready', () => {
+    $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
+    $(window).on('resize', () => resize(window.innerWidth));
+    $(window).on('blur', () => keytrainer.freeKeys());
+});
 document.addEventListener('keyboardready', () => {
     keytrainer.keys = keytrainer.keyboard.keys;
     keytrainer.stopwatch = new Stopwatch();
@@ -54,18 +61,13 @@ document.addEventListener('keyboardready', () => {
     keytrainer.stopwatch.format = 'mm:ss';
     keytrainer.stopwatch.stopwatchElement = keytrainer.stopwatchElement;
     keytrainer.stopwatch.speedmeterElement = keytrainer.speedmeterElement;
-    keytrainer.getTips(tipsJSON, () => keytrainer.renderTip());
-    keytrainer.getPattern(patternJSON, () => document.dispatchEvent(patternready));
+    $.getJSON(tipsJSON, (data) => {
+        keytrainer.getTips(data, () => keytrainer.renderTip());
+    });
+    $.getJSON(patternJSON, (data) => {
+        keytrainer.getPattern(data, () => document.dispatchEvent(patternready));
+    });
 });
-document.addEventListener('patternready', () => {
-    // eslint-disable-next-line no-undef
-    $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
-    // eslint-disable-next-line no-undef
-    $(window).on('resize', () => resize(window.innerWidth));
-    // eslint-disable-next-line no-undef
-    $(window).on('blur', () => keytrainer.freeKeys());
-});
-// eslint-disable-next-line no-undef
 $(document).ready(
     () => {
         backslash.value = '\\';
@@ -76,7 +78,16 @@ $(document).ready(
         window.keytrainer = new Keytrainer();
         keytrainer = window.keytrainer;
         keytrainer.keyboard = new Keyboard();
-        keytrainer.keyboard.init(layoutJSON, () => document.dispatchEvent(keyboardready));
+        keytrainer.keyboard.keyboardElement = $(keyboardSelector);
+        keytrainer.patternElement = $(patternSelector);
+        keytrainer.keytrainerElement = $(keytrainerSelector);
+        keytrainer.stopwatchElement = $(stopwatchSelector);
+        keytrainer.speedmeterElement = $(speedSelector);
+        keytrainer.missprintsElement = $(missprintsSelector);
+        keytrainer.tipsElement = $(tipsSelector);
+        $.getJSON(layoutJSON, (data) => {
+            keytrainer.keyboard.init(data, () => document.dispatchEvent(keyboardready));
+        });
         widthRatio.value = 6.5;
         resize(window.innerWidth);
     },
@@ -88,7 +99,7 @@ $(document).ready(
  * @returns {object} Keytrainer
  */
 function Keytrainer() {
-    const preventDefault = true;
+    let preventDefault = true;
     let missprints = 0;
     let stopwatchStarted = false;
     return {
@@ -96,38 +107,32 @@ function Keytrainer() {
          * jQuery object of keytrainer pattern HTML element
          * @property {object} patternElement
          */
-        // eslint-disable-next-line no-undef
-        patternElement: $(patternSelector),
+        patternElement: {},
         /**
          * jQuery object of keyitrainer user input HTML element
          * @property {object} keytrainerElement
          */
-        // eslint-disable-next-line no-undef
-        keytrainerElement: $(keytrainerSelector),
+        keytrainerElement: {},
         /**
          * jQuery object of keytrainer stopwatch HTML element
          * @property {object} stopwatchElement
          */
-        // eslint-disable-next-line no-undef
-        stopwatchElement: $(stopwatchSelector),
+        stopwatchElement: {},
         /**
          * jQuery object of keytrainer speedmeter HTML element
          * @property {object} speedmeterElement
          */
-        // eslint-disable-next-line no-undef
-        speedmeterElement: $(speedSelector),
+        speedmeterElement: {},
         /**
          * jQuery object of keytrainer missprints HTML element
          * @property {object} missprintsElement
          */
-        // eslint-disable-next-line no-undef
-        missprintsElement: $(missprintsSelector),
+        missprintsElement: {},
         /**
          * jQuery object of keyitrainer tips HTML element
          * @property {object} tipsElement
          */
-        // eslint-disable-next-line no-undef
-        tipsElement: $(tipsSelector),
+        tipsElement: {},
         /**
          * Keyboard object
          * @property {object} keyboard @see Keyboard
@@ -248,8 +253,12 @@ function Keytrainer() {
                         }
                     }
                 } else if (input === ' ') {
-                    this.getPattern(patternJSON, () => this.renderTip());
-                    this.findKey(' ').highlightKey();
+                    this.getPattern(
+                        this.getJSON(patternJSON, (data) => data), () => {
+                            this.renderTip();
+                            this.findKey(' ').highlightKey();
+                        },
+                    );
                 }
                 key.toggleKey();
             }
@@ -287,56 +296,47 @@ function Keytrainer() {
             if (e.type === 'keyup') this.keyUp(key);
         },
         /**
-         * Get JSON from url and create pattern and keytrainer HTML elements
+         * Get JSON and create pattern and keytrainer HTML elements
          * @method getPattern
-         * @param {String} src URL to JSON whith keyboard layout
-         * @param {Function} callback called when ready
+         * @param {JSON} data JSON whith keyboard layout
+         * @param {function} callback called when ready
          */
-        getPattern(src, callback) {
+        getPattern(data, callback) {
             this.pattern = [];
             this.position = 0;
             this.patternElement.html('');
             this.keytrainerElement.html('');
             this.missprintsElement.html('00');
-            this.renderTip();
             missprints = 0;
             this.stopwatch.stop();
             stopwatchStarted = false;
-            // eslint-disable-next-line no-undef
-            $.getJSON(src, (data) => {
-                this.pattern = Array.from(data.pattern).map((c, i) => {
-                    const isFirst = i === 0;
-                    if (isFirst) this.findKey(c).highlightKey();
-                    return {
-                        char: c,
-                        input: null,
-                        // eslint-disable-next-line no-undef
-                        charElement: $('<span/>')
-                            .text(c)
-                            .addClass((isFirst) ? highlightedCSS : typeCSS)
-                            .appendTo(this.patternElement),
-                        // eslint-disable-next-line no-undef
-                        inputElement: $('<span/>')
-                            .text((isFirst) ? c : null)
-                            .addClass((isFirst) ? highlightedCSS : null)
-                            .appendTo(this.keytrainerElement),
-                    };
-                });
-                callback();
+            this.pattern = Array.from(data.pattern).map((c, i) => {
+                const isFirst = i === 0;
+                if (isFirst) this.findKey(c).highlightKey();
+                return {
+                    char: c,
+                    input: null,
+                    charElement: $('<span/>')
+                        .text(c)
+                        .addClass((isFirst) ? highlightedCSS : typeCSS)
+                        .appendTo(this.patternElement),
+                    inputElement: $('<span/>')
+                        .text((isFirst) ? c : null)
+                        .addClass((isFirst) ? highlightedCSS : null)
+                        .appendTo(this.keytrainerElement),
+                };
             });
+            callback();
         },
         /**
          * Load tips JSON for selected language
          * @method getTips
-         * @param {sting} src URL to tips JSON
+         * @param {JSON} data tips JSON
          * @param {function} callback callback function
          */
-        getTips(src, callback) {
-            // eslint-disable-next-line no-undef
-            $.getJSON(src, (data) => {
-                this.tips = data;
-                callback();
-            });
+        getTips(data, callback) {
+            this.tips = data;
+            callback();
         },
         /**
          * Render tip from selected language based JSON
@@ -371,5 +371,6 @@ function Keytrainer() {
             return null;
         },
         get preventDefault() { return preventDefault; },
+        set preventDefault(value) { preventDefault = value; },
     };
 }

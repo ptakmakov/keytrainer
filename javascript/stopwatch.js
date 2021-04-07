@@ -171,7 +171,7 @@ function Stopwatch(delay = 10) {
          * HH - hours, mm - minutes, ss - seconds, mi - milliseconds
          * @param {string} format HH - hours, mm - minutes, ss - seconds, mi - milliseconds
          */
-        set format(format) { defaultFormat = (format) || defaultFormat; },
+        set format(format) { defaultFormat = format || defaultFormat; },
     };
 }
 export { Stopwatch as default };

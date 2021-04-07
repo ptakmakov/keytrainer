@@ -1,7 +1,4 @@
-/**
- * Document elements selectors
- */
-const keyboardSelector = '.keyboard';
+/* eslint-disable no-undef */
 /**
  * HTML element used for render keyboard
  */
@@ -34,7 +31,6 @@ const backslash = (function Backslash() {
  * @returns {object} JQuery object <div/> with or without attributes
  */
 function jQueryElement(o) {
-    // eslint-disable-next-line no-undef
     return $(divElement, o);
 }
 /**
@@ -149,11 +145,11 @@ function Key(key) {
  */
 function Keyboard() {
     const keyObjects = [];
-    let keyboardElement;
+    let $keyboardElement;
     function render(rows) {
         rows.forEach(
             (keys, i, a) => {
-                const row = keysRow().appendTo(keyboardElement);
+                const row = keysRow().appendTo($keyboardElement);
                 keys.forEach(
                     (k) => {
                         const key = new Key(k);
@@ -161,26 +157,31 @@ function Keyboard() {
                         keyObjects.push(key);
                     }, row, keyObjects,
                 );
-                if (i + 1 < a.length) delimiter().appendTo(keyboardElement);
+                if (i + 1 < a.length) delimiter().appendTo($keyboardElement);
             },
         );
     }
     return {
-    /**
-     * Property keys
-     * @returns {Array[{Object}...]} Returns array of objects type of Key
-     */
+        /**
+         * @property {object} keyboardElement jQuery object
+         * @param {object} value jQuery object
+         */
+        set keyboardElement(value) { $keyboardElement = value; },
+        get keyboardElement() { return $keyboardElement; },
+        /**
+         * Property keys
+         * @returns {Array[{Object}...]} Returns array of objects type of Key
+         */
         keys: keyObjects,
         /**
-     *
-     * @param {string} src URL to json keyboard array[keyboard rows array[keyboard keys array[]]]
-     * @param {callback} callback any callback function
-     */
-        init(src, callback) {
-            // eslint-disable-next-line no-undef
-            keyboardElement = $(keyboardSelector).html('');
-            // eslint-disable-next-line no-undef
-            $.getJSON(src, (data) => { render(data); callback(); });
+         *
+         * @param {string} data JSON keyboard array[keyboard rows array[keyboard keys array[]]]
+         * @param {callback} callback any callback function
+         */
+        init(data, callback) {
+            this.keyboardElement.html('');
+            render(data);
+            callback();
         },
     };
 }

@@ -1,6 +1,6 @@
-#### Simple keyboard simulator script
+### Simple keyboard simulator script
 
-##### Can be used to quickly and easily learn blind typing
+#### Can be used to quickly and easily learn blind typing
 
 Supports two language keyboard layout ru and en.
 You can easily add other languages, you just need to add the correct
