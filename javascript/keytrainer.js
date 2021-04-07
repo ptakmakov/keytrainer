@@ -61,10 +61,10 @@ document.addEventListener('keyboardready', () => {
     keytrainer.stopwatch.format = 'mm:ss';
     keytrainer.stopwatch.stopwatchElement = keytrainer.stopwatchElement;
     keytrainer.stopwatch.speedmeterElement = keytrainer.speedmeterElement;
-    $.getJSON(tipsJSON, (data) => {
+    keytrainer.getJSON(tipsJSON, (data) => {
         keytrainer.getTips(data, () => keytrainer.renderTip());
     });
-    $.getJSON(patternJSON, (data) => {
+    keytrainer.getJSON(patternJSON, (data) => {
         keytrainer.getPattern(data, () => document.dispatchEvent(patternready));
     });
 });
@@ -77,6 +77,7 @@ $(document).ready(
         // eslint-disable-next-line no-use-before-define
         window.keytrainer = new Keytrainer();
         keytrainer = window.keytrainer;
+        keytrainer.getJSON = $.getJSON;
         keytrainer.keyboard = new Keyboard();
         keytrainer.keyboard.keyboardElement = $(keyboardSelector);
         keytrainer.patternElement = $(patternSelector);
@@ -85,7 +86,7 @@ $(document).ready(
         keytrainer.speedmeterElement = $(speedSelector);
         keytrainer.missprintsElement = $(missprintsSelector);
         keytrainer.tipsElement = $(tipsSelector);
-        $.getJSON(layoutJSON, (data) => {
+        keytrainer.getJSON(layoutJSON, (data) => {
             keytrainer.keyboard.init(data, () => document.dispatchEvent(keyboardready));
         });
         widthRatio.value = 6.5;
@@ -103,6 +104,10 @@ function Keytrainer() {
     let missprints = 0;
     let stopwatchStarted = false;
     return {
+        /**
+         * @property {function} getJSON any JSON loader accepts URL and callback(data) function
+         */
+        getJSON: {},
         /**
          * jQuery object of keytrainer pattern HTML element
          * @property {object} patternElement
@@ -253,12 +258,14 @@ function Keytrainer() {
                         }
                     }
                 } else if (input === ' ') {
-                    this.getPattern(
-                        this.getJSON(patternJSON, (data) => data), () => {
-                            this.renderTip();
-                            this.findKey(' ').highlightKey();
-                        },
-                    );
+                    this.getJSON(patternJSON, (data) => {
+                        this.getPattern(
+                            data, () => {
+                                this.renderTip();
+                                this.findKey(' ').highlightKey();
+                            },
+                        );
+                    });
                 }
                 key.toggleKey();
             }
