@@ -2,18 +2,10 @@
 import { backslash, Keyboard } from './keytrainer.keyboard.js';
 import Stopwatch from './stopwatch.js';
 import { resize, widthRatio } from './resize.js';
+import Controls from './keytrainer.controls.js';
+import Tips from './keytrainer.tips.js';
 
 let keytrainer;
-/**
- * Document elements selectors
- */
-const keyboardSelector = '.keyboard';
-const patternSelector = '.keytrainer-pattern';
-const keytrainerSelector = '.keytrainer';
-const stopwatchSelector = '.stopwatch';
-const speedSelector = '.speed';
-const missprintsSelector = '.missprints';
-const tipsSelector = '.tips';
 /**
  * CSS classes, other CSS classes defined in json layout in first element of key array
  */
@@ -56,14 +48,6 @@ document.addEventListener('patternready', () => {
 });
 document.addEventListener('keyboardready', () => {
     keytrainer.keys = keytrainer.keyboard.keys;
-    keytrainer.stopwatch = new Stopwatch();
-    keytrainer.stopwatch.delay = 5;
-    keytrainer.stopwatch.format = 'mm:ss';
-    keytrainer.stopwatch.stopwatchElement = keytrainer.stopwatchElement;
-    keytrainer.stopwatch.speedmeterElement = keytrainer.speedmeterElement;
-    keytrainer.getJSON(tipsJSON, (data) => {
-        keytrainer.getTips(data, () => keytrainer.renderTip());
-    });
     keytrainer.getJSON(patternJSON, (data) => {
         keytrainer.getPattern(data, () => document.dispatchEvent(patternready));
     });
@@ -71,6 +55,7 @@ document.addEventListener('keyboardready', () => {
 $(document).ready(
     () => {
         backslash.value = '\\';
+        const controls = new Controls();
         // prod
         // keytrainer = new Keytrainer();
         // dev
@@ -78,18 +63,25 @@ $(document).ready(
         window.keytrainer = new Keytrainer();
         keytrainer = window.keytrainer;
         keytrainer.getJSON = $.getJSON;
+        keytrainer.controls = controls;
+        keytrainer.tips = new Tips();
+        keytrainer.getJSON(tipsJSON, (data) => {
+            keytrainer.tips.tips = data;
+            keytrainer.renderTip();
+        });
+        keytrainer.stopwatch = new Stopwatch();
+        keytrainer.stopwatch.delay = 5;
+        keytrainer.stopwatch.format = 'mm:ss';
+        keytrainer.stopwatch.stopwatchElement = controls.stopwatch;
+        keytrainer.stopwatch.speedmeterElement = controls.speedmeter;
         keytrainer.keyboard = new Keyboard();
-        keytrainer.keyboard.keyboardElement = $(keyboardSelector);
-        keytrainer.patternElement = $(patternSelector);
-        keytrainer.keytrainerElement = $(keytrainerSelector);
-        keytrainer.stopwatchElement = $(stopwatchSelector);
-        keytrainer.speedmeterElement = $(speedSelector);
-        keytrainer.missprintsElement = $(missprintsSelector);
-        keytrainer.tipsElement = $(tipsSelector);
+        keytrainer.keyboard.keyboardElement = controls.keyboard;
+        keytrainer.stopwatchElement = controls.stopwatch;
+        keytrainer.speedmeterElement = controls.speedmeter;
         keytrainer.getJSON(layoutJSON, (data) => {
             keytrainer.keyboard.init(data, () => document.dispatchEvent(keyboardready));
         });
-        widthRatio.value = 6.5;
+        widthRatio.value = 65;
         resize(window.innerWidth);
     },
 );
@@ -100,27 +92,28 @@ $(document).ready(
  * @returns {object} Keytrainer
  */
 function Keytrainer() {
+    let controls;
+    let tips;
     let preventDefault = true;
     let missprints = 0;
     let stopwatchStarted = false;
     return {
         /**
-         * @property {function} getJSON any JSON loader accepts URL and callback(data) function
+         * HTML controls for keyboard simulator
+         * @property {object} controls
+         * @param {object} o
+         */
+        set controls(o) { controls = o; },
+        set tips(o) { tips = o; },
+        get tips() { return tips; },
+        /**
+         * Any JSON loader accepts URL and callback(JSON) function
+         * @property {function} getJSON
          */
         getJSON: {},
         /**
          * jQuery object of keytrainer pattern HTML element
          * @property {object} patternElement
-         */
-        patternElement: {},
-        /**
-         * jQuery object of keyitrainer user input HTML element
-         * @property {object} keytrainerElement
-         */
-        keytrainerElement: {},
-        /**
-         * jQuery object of keytrainer stopwatch HTML element
-         * @property {object} stopwatchElement
          */
         stopwatchElement: {},
         /**
@@ -129,18 +122,8 @@ function Keytrainer() {
          */
         speedmeterElement: {},
         /**
-         * jQuery object of keytrainer missprints HTML element
-         * @property {object} missprintsElement
-         */
-        missprintsElement: {},
-        /**
          * jQuery object of keyitrainer tips HTML element
          * @property {object} tipsElement
-         */
-        tipsElement: {},
-        /**
-         * Keyboard object
-         * @property {object} keyboard @see Keyboard
          */
         keyboard: null,
         /**
@@ -163,11 +146,6 @@ function Keytrainer() {
          * @property {number} position
          */
         position: 0,
-        /**
-         * Object with tips strings
-         * @property {object} tips
-         */
-        tips: null,
         /**
          * Starts counting typing speed
          * @method startStopwatch
@@ -208,11 +186,11 @@ function Keytrainer() {
             if (input !== patternItem.char) {
                 patternItem.inputElement.toggleClass(etextCSS);
                 missprints += 1;
-                this.missprintsElement.html(String(missprints).padStart(2, '0'));
+                controls.missprints.html(String(missprints).padStart(2, '0'));
             }
         },
         /**
-         * Highlight keytrainer pattern and input next char
+         * Highlight next char in keytrainer pattern and input
          * Highlight keytrainer keyboard next key
          * @method renderPatternNextChar
          */
@@ -222,10 +200,10 @@ function Keytrainer() {
             this.findKey(patternItem.char).highlightKey();
 
             if (patternItem.char === ' ') {
-                patternItem.inputElement.text('_');
-                patternItem.charElement.text('_');
+                patternItem.inputElement.html('_');
+                patternItem.charElement.html('_');
             } else {
-                patternItem.inputElement.text(patternItem.char);
+                patternItem.inputElement.html(patternItem.char);
             }
 
             patternItem.inputElement.toggleClass(highlightedCSS);
@@ -285,9 +263,11 @@ function Keytrainer() {
          * @method freeKeys
          */
         freeKeys() {
-            this.keys
-                .filter((v) => v.isDown)
-                .forEach((v) => v.toggleKey());
+            if (this.keys) {
+                this.keys
+                    .filter((v) => v.isDown)
+                    .forEach((v) => v.toggleKey());
+            }
         },
         /**
          * Tracks events keydown, keypress, keyup
@@ -311,9 +291,9 @@ function Keytrainer() {
         getPattern(data, callback) {
             this.pattern = [];
             this.position = 0;
-            this.patternElement.html('');
-            this.keytrainerElement.html('');
-            this.missprintsElement.html('00');
+            controls.pattern.html('');
+            controls.keytrainer.html('');
+            controls.missprints.html('00');
             missprints = 0;
             this.stopwatch.stop();
             stopwatchStarted = false;
@@ -326,11 +306,11 @@ function Keytrainer() {
                     charElement: $('<span/>')
                         .text(c)
                         .addClass((isFirst) ? highlightedCSS : typeCSS)
-                        .appendTo(this.patternElement),
+                        .appendTo(controls.pattern),
                     inputElement: $('<span/>')
                         .text((isFirst) ? c : null)
                         .addClass((isFirst) ? highlightedCSS : null)
-                        .appendTo(this.keytrainerElement),
+                        .appendTo(controls.keytrainer),
                 };
             });
             callback();
@@ -342,7 +322,7 @@ function Keytrainer() {
          * @param {function} callback callback function
          */
         getTips(data, callback) {
-            this.tips = data;
+            tips.tips = data;
             callback();
         },
         /**
@@ -353,12 +333,11 @@ function Keytrainer() {
         renderTip(identifier) {
             if (this.tips) {
                 if (!identifier) {
-                    const tips = this.tips[tipRandom];
-                    this.tipsElement.html(tips[Math.random() * tips.length | 0]);
+                    controls.tips.html(tips.getTip(tipRandom));
                 }
-                if (identifier) this.tipsElement.html(this.tips[identifier]);
-                if (identifier === tipMissprint) this.tipsElement.addClass(etextCSS);
-                else this.tipsElement.removeClass(etextCSS);
+                if (identifier) controls.tips.html(tips.getTip(identifier));
+                if (identifier === tipMissprint) controls.tips.addClass(etextCSS);
+                else controls.tips.removeClass(etextCSS);
             }
         },
         /**
