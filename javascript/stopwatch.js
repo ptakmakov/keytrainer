@@ -9,8 +9,8 @@ function Stopwatch(delay = 10) {
     let updateInterval;
     let updateDelay = delay;
     let pauseOffset = 0;
-    let $stopwatchElement = null;
-    let $speedmeterElement = null;
+    let stopwatch = null;
+    let speedmeter = null;
     let defaultFormat = 'HH:mm:ss.mi';
     let quantityOfWhatever = 0;
     function padNum(i, length = 2) {
@@ -47,15 +47,15 @@ function Stopwatch(delay = 10) {
                 updateInterval = setInterval(
                     () => {
                         currentTime = Date.now();
-                        if ($stopwatchElement) {
-                            $stopwatchElement.text(
+                        if (stopwatch) {
+                            stopwatch.text(
                                 (defaultFormat)
                                     ? this.toString(defaultFormat)
                                     : this.toString(),
                             );
                         }
-                        if ($speedmeterElement) {
-                            $speedmeterElement
+                        if (speedmeter) {
+                            speedmeter
                                 .text(padNum(this.speedPerMinute(quantityOfWhatever), 4));
                         }
                     },
@@ -146,14 +146,14 @@ function Stopwatch(delay = 10) {
          * If set update element text after stopwatch start
          * @param {Object} element jQuery element
          */
-        set stopwatchElement(element) { $stopwatchElement = element; },
+        set stopwatch(element) { stopwatch = element; },
         /**
          * Set jQuery element for text view of Stopwatch calculated speed of whatever per minute
          * @property {Object} speedmeterElement [=jQuery element]
          * If set updates element text after stopwatch start
          * @param {Object} element jQuery element
          */
-        set speedmeterElement(element) { $speedmeterElement = element; },
+        set speedmeter(element) { speedmeter = element; },
         /**
          * Set current quantity of whatever, for example - symbols
          * @property {Number} quantity

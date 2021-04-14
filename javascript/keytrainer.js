@@ -4,21 +4,11 @@ import Stopwatch from './stopwatch.js';
 import { resize, widthRatio } from './resize.js';
 import Controls from './keytrainer.controls.js';
 import Tips from './keytrainer.tips.js';
+import Load from './keytrainer.load.js';
+import Pattern from './keytrainer.pattern.js';
+import * as css from './keytrainer.css.js';
 
 let keytrainer;
-/**
- * CSS classes, other CSS classes defined in json layout in first element of key array
- */
-const highlightedCSS = 'highlighted';
-const typeCSS = 'type';
-const typedCSS = 'typed';
-const etextCSS = 'e-text-c';
-/**
-* Default URLs
-*/
-const layoutJSON = '/json/en.json';
-const tipsJSON = '/json/en.tips.json';
-const patternJSON = '/node/pattern.js';
 /**
  * Tips identificators
  */
@@ -47,40 +37,14 @@ document.addEventListener('patternready', () => {
     $(window).on('blur', () => keytrainer.freeKeys());
 });
 document.addEventListener('keyboardready', () => {
-    keytrainer.keys = keytrainer.keyboard.keys;
-    keytrainer.getJSON(patternJSON, (data) => {
-        keytrainer.getPattern(data, () => document.dispatchEvent(patternready));
-    });
+    let i = 0; i += 1; return i;
 });
 $(document).ready(
     () => {
         backslash.value = '\\';
-        const controls = new Controls();
-        // prod
-        // keytrainer = new Keytrainer();
-        // dev
         // eslint-disable-next-line no-use-before-define
         window.keytrainer = new Keytrainer();
         keytrainer = window.keytrainer;
-        keytrainer.getJSON = $.getJSON;
-        keytrainer.controls = controls;
-        keytrainer.tips = new Tips();
-        keytrainer.getJSON(tipsJSON, (data) => {
-            keytrainer.tips.tips = data;
-            keytrainer.renderTip();
-        });
-        keytrainer.stopwatch = new Stopwatch();
-        keytrainer.stopwatch.delay = 5;
-        keytrainer.stopwatch.format = 'mm:ss';
-        keytrainer.stopwatch.stopwatchElement = controls.stopwatch;
-        keytrainer.stopwatch.speedmeterElement = controls.speedmeter;
-        keytrainer.keyboard = new Keyboard();
-        keytrainer.keyboard.keyboardElement = controls.keyboard;
-        keytrainer.stopwatchElement = controls.stopwatch;
-        keytrainer.speedmeterElement = controls.speedmeter;
-        keytrainer.getJSON(layoutJSON, (data) => {
-            keytrainer.keyboard.init(data, () => document.dispatchEvent(keyboardready));
-        });
         widthRatio.value = 65;
         resize(window.innerWidth);
     },
@@ -92,55 +56,72 @@ $(document).ready(
  * @returns {object} Keytrainer
  */
 function Keytrainer() {
-    let controls;
-    let tips;
+    /**
+     * load
+     * @private
+     * @property {object} load Loads necessary JSON sources
+     */
+    const load = new Load();
+    /**
+     * controls
+     * @private
+     * @property {object} controls HTML controls for keyboard simulator
+     */
+    const controls = new Controls();
+    /**
+     * keyboard
+     * @private
+     * @property {object} keyboard Renders keyboard, create keys array of objects key
+     * @see Keyboard.keys
+     */
+    const keyboard = new Keyboard();
+    /**
+     * stopwatch
+     * @private
+     * @property {object} stopwatch Renders stopwatch
+     * @see Stopwatch
+     */
+    const stopwatch = new Stopwatch();
+    /**
+     * tips
+     * @private
+     * @property {object} tips Contains object with tips, errors and other informational phrases
+     * @see Tips
+     */
+    const tips = new Tips();
+    /**
+     * keys
+     * @private
+     * @property {Array[{object}]} keys Keyboard keys @see Keyboard
+     */
+    const pattern = new Pattern();
     let preventDefault = true;
     let missprints = 0;
     let stopwatchStarted = false;
+    function init() {
+        load.tips(null, (data) => {
+            tips.tips = data;
+        });
+
+        keyboard.keyboardElement = controls.keyboard;
+        load.layout(null, (data) => {
+            keyboard.init(data, () => {
+                document.dispatchEvent(keyboardready);
+            });
+        });
+
+        pattern.pattern = controls.pattern;
+        pattern.keytrainer = controls.keytrainer;
+        load.pattern(null, (data) => {
+            pattern.template = data.pattern;
+        });
+
+        stopwatch.delay = 5;
+        stopwatch.format = 'mm:ss';
+        stopwatch.stopwatch = controls.stopwatch;
+        stopwatch.speedmeter = controls.speedmeter;
+    } init();
     return {
-        /**
-         * HTML controls for keyboard simulator
-         * @property {object} controls
-         * @param {object} o
-         */
-        set controls(o) { controls = o; },
-        set tips(o) { tips = o; },
-        get tips() { return tips; },
-        /**
-         * Any JSON loader accepts URL and callback(JSON) function
-         * @property {function} getJSON
-         */
-        getJSON: {},
-        /**
-         * jQuery object of keytrainer pattern HTML element
-         * @property {object} patternElement
-         */
-        stopwatchElement: {},
-        /**
-         * jQuery object of keytrainer speedmeter HTML element
-         * @property {object} speedmeterElement
-         */
-        speedmeterElement: {},
-        /**
-         * jQuery object of keyitrainer tips HTML element
-         * @property {object} tipsElement
-         */
-        keyboard: null,
-        /**
-         * Stopwatch object
-         * @property {object} stopwatch @see Stopwatch
-         */
-        stopwatch: null,
-        /**
-         * Keyboard keys
-         * @property {Array({objects})} keys @see Keyboard.keys
-         */
-        keys: null,
-        /**
-         * Keytrainer pattern
-         * @property {Array{objects}} pattern
-         */
-        pattern: null,
         /**
          * Current position of pattern last typed symbol
          * @property {number} position
@@ -152,12 +133,12 @@ function Keytrainer() {
          */
         startStopwatch() {
             if (!stopwatchStarted) {
-                this.stopwatch.reset();
-                this.stopwatch.start();
-                this.stopwatch.quantity = 0;
+                stopwatch.reset();
+                stopwatch.start();
+                stopwatch.quantity = 0;
                 stopwatchStarted = true;
             }
-            this.stopwatch.quantity += 1;
+            stopwatch.quantity += 1;
         },
         /**
          * Unhighlight keytrainer pattern current char and print user input
@@ -170,8 +151,8 @@ function Keytrainer() {
 
             this.findKey(patternItem.char).highlightKey();
             patternItem.charElement
-                .toggleClass(highlightedCSS)
-                .toggleClass(typedCSS);
+                .toggleClass(css.highlighted)
+                .toggleClass(css.typed);
             if (patternItem.char === ' ') patternItem.charElement.html(' ');
 
             patternItem.input = input;
@@ -181,10 +162,10 @@ function Keytrainer() {
                         ? '&nbsp;'
                         : input,
                 )
-                .toggleClass(highlightedCSS);
+                .toggleClass(css.highlighted);
 
             if (input !== patternItem.char) {
-                patternItem.inputElement.toggleClass(etextCSS);
+                patternItem.inputElement.toggleClass(css.etext);
                 missprints += 1;
                 controls.missprints.html(String(missprints).padStart(2, '0'));
             }
@@ -206,10 +187,10 @@ function Keytrainer() {
                 patternItem.inputElement.html(patternItem.char);
             }
 
-            patternItem.inputElement.toggleClass(highlightedCSS);
+            patternItem.inputElement.toggleClass(css.highlighted);
             patternItem.charElement
-                .toggleClass(highlightedCSS)
-                .toggleClass(typeCSS);
+                .toggleClass(css.highlighted)
+                .toggleClass(css.type);
         },
         /**
          * Toggle key pressed when fires keyup event
@@ -230,7 +211,7 @@ function Keytrainer() {
 
                         if (this.position < this.pattern.length) this.renderPatternNextChar();
                         else {
-                            this.stopwatch.stop();
+                            stopwatch.stop();
                             this.renderTip(tipNewphrase);
                             this.findKey(' ').highlightKey();
                         }
@@ -259,17 +240,6 @@ function Keytrainer() {
             }
         },
         /**
-         * Unpress all pressed keys for example when window focused out
-         * @method freeKeys
-         */
-        freeKeys() {
-            if (this.keys) {
-                this.keys
-                    .filter((v) => v.isDown)
-                    .forEach((v) => v.toggleKey());
-            }
-        },
-        /**
          * Tracks events keydown, keypress, keyup
          * Controlls keyboard behavior
          * @method trackKey
@@ -295,7 +265,7 @@ function Keytrainer() {
             controls.keytrainer.html('');
             controls.missprints.html('00');
             missprints = 0;
-            this.stopwatch.stop();
+            stopwatch.stop();
             stopwatchStarted = false;
             this.pattern = Array.from(data.pattern).map((c, i) => {
                 const isFirst = i === 0;
@@ -305,26 +275,26 @@ function Keytrainer() {
                     input: null,
                     charElement: $('<span/>')
                         .text(c)
-                        .addClass((isFirst) ? highlightedCSS : typeCSS)
+                        .addClass((isFirst) ? css.highlighted : css.type)
                         .appendTo(controls.pattern),
                     inputElement: $('<span/>')
                         .text((isFirst) ? c : null)
-                        .addClass((isFirst) ? highlightedCSS : null)
+                        .addClass((isFirst) ? css.highlighted : null)
                         .appendTo(controls.keytrainer),
                 };
             });
             callback();
         },
-        /**
-         * Load tips JSON for selected language
-         * @method getTips
-         * @param {JSON} data tips JSON
-         * @param {function} callback callback function
-         */
-        getTips(data, callback) {
-            tips.tips = data;
-            callback();
-        },
+        // /**
+        //  * Load tips JSON for selected language
+        //  * @method getTips
+        //  * @param {JSON} data tips JSON
+        //  * @param {function} callback callback function
+        //  */
+        // getTips(data, callback) {
+        //     tips.tips = data;
+        //     callback();
+        // },
         /**
          * Render tip from selected language based JSON
          * @method renderTip
@@ -336,8 +306,19 @@ function Keytrainer() {
                     controls.tips.html(tips.getTip(tipRandom));
                 }
                 if (identifier) controls.tips.html(tips.getTip(identifier));
-                if (identifier === tipMissprint) controls.tips.addClass(etextCSS);
-                else controls.tips.removeClass(etextCSS);
+                if (identifier === tipMissprint) controls.tips.addClass(css.etext);
+                else controls.tips.removeClass(css.etext);
+            }
+        },
+        /**
+         * Unpress all pressed keys for example when window focused out
+         * @method freeKeys
+         */
+        freeKeys() {
+            if (keyboard.keys) {
+                keyboard.keys
+                    .filter((v) => v.isDown)
+                    .forEach((v) => v.toggleKey());
             }
         },
         /**
@@ -347,8 +328,8 @@ function Keytrainer() {
          * @returns {object} Returns keyboard key object @see {Key}
          */
         findKey(char, keyCode) {
-            if (this.keys) {
-                return this.keys.filter(
+            if (keyboard.keys) {
+                return keyboard.keys.filter(
                     (k) => ((k.isSpecial && char !== ' ')
                         ? k.lowercaseKey === keyCode
                         : k.lowercaseKey === char || k.uppercaseKey === char),
