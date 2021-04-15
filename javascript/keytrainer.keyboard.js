@@ -134,7 +134,7 @@ function Key(key) {
  * @property {array} keys array of Key objects @see Key
  */
 function Keyboard() {
-    const keys = [];
+    let keys = [];
     let keyboardElement;
     function render(rows) {
         rows.forEach(
@@ -163,6 +163,7 @@ function Keyboard() {
          * @param {string} data JSON keyboard array[keyboard rows array[keyboard keys array[]]]
          */
         init(data) {
+            keys = [];
             this.keyboardElement.html('');
             render(data);
         },

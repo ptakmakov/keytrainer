@@ -174,5 +174,23 @@ function Keytrainer() {
         },
         get preventDefault() { return preventDefault; },
         set preventDefault(value) { preventDefault = value; },
+        changeLayout(lang) {
+            load.tipsJSON = `/json/${lang}.tips.json`;
+            load.layoutJSON = `/json/${lang}.json`;
+            load.patternJSON = `/node/${lang}.pattern.js`;
+            load.tips(null, (data) => {
+                tips.tips = data;
+                tips.renderTip(tipskeys.random);
+            });
+
+            load.layout(null, (data) => {
+                keyboard.init(data);
+            });
+
+            load.pattern(null, (data) => {
+                pattern.template = data.pattern;
+                keyboard.highlightKey(pattern.next);
+            });
+        },
     };
 }

@@ -2,22 +2,22 @@ function Load() {
     /**
     * Default URLs
     */
-    const layoutJSON = '/json/en.json';
-    const tipsJSON = '/json/en.tips.json';
-    const patternJSON = '/node/pattern.js';
     function getJSON(url, callback) {
         // eslint-disable-next-line no-undef
         $.getJSON(url, callback);
     }
     return {
+        layoutJSON: '/json/en.json',
+        tipsJSON: '/json/en.tips.json',
+        patternJSON: '/node/en.pattern.js',
         layout(options, callback) {
-            getJSON(layoutJSON, callback);
+            getJSON(this.layoutJSON, callback);
         },
         pattern(options, callback) {
-            getJSON(patternJSON, callback);
+            getJSON(this.patternJSON, callback);
         },
         tips(options, callback) {
-            getJSON(tipsJSON, callback);
+            getJSON(this.tipsJSON, callback);
         },
     };
 }
