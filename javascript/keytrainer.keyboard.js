@@ -134,20 +134,20 @@ function Key(key) {
  * @property {array} keys array of Key objects @see Key
  */
 function Keyboard() {
-    const keyObjects = [];
-    let $keyboardElement;
+    const keys = [];
+    let keyboardElement;
     function render(rows) {
         rows.forEach(
-            (keys, i, a) => {
-                const row = keysRow().appendTo($keyboardElement);
-                keys.forEach(
+            (rowkeys, i, a) => {
+                const row = keysRow().appendTo(keyboardElement);
+                rowkeys.forEach(
                     (k) => {
                         const key = new Key(k);
                         key.keyElement.appendTo(row);
-                        keyObjects.push(key);
-                    }, row, keyObjects,
+                        keys.push(key);
+                    }, row, keys,
                 );
-                if (i + 1 < a.length) delimiter().appendTo($keyboardElement);
+                if (i + 1 < a.length) delimiter().appendTo(keyboardElement);
             },
         );
     }
@@ -156,13 +156,8 @@ function Keyboard() {
          * @property {object} keyboardElement jQuery object
          * @param {object} value jQuery object
          */
-        set keyboardElement(value) { $keyboardElement = value; },
-        get keyboardElement() { return $keyboardElement; },
-        /**
-         * Property keys
-         * @returns {Array[{Object}...]} Returns array of objects type of Key
-         */
-        keys: keyObjects,
+        set keyboardElement(value) { keyboardElement = value; },
+        get keyboardElement() { return keyboardElement; },
         /**
          * @method init
          * @param {string} data JSON keyboard array[keyboard rows array[keyboard keys array[]]]
@@ -170,6 +165,36 @@ function Keyboard() {
         init(data) {
             this.keyboardElement.html('');
             render(data);
+        },
+        /**
+         * Search key by char or keyCode
+         * @param {string} char
+         * @param {string} keyCode
+         * @returns {object} Returns keyboard key object @see {Key}
+         */
+        findKey(char, keyCode) {
+            if (keys) {
+                return keys.filter(
+                    (k) => ((k.isSpecial && char !== ' ')
+                        ? k.lowercaseKey === keyCode
+                        : k.lowercaseKey === char || k.uppercaseKey === char),
+                )[0];
+            }
+            return null;
+        },
+        /**
+         * Unpress all pressed keys for example when window focused out
+         * @method freeKeys
+         */
+        freeKeys() {
+            if (keys) {
+                keys
+                    .filter((v) => v.isDown)
+                    .forEach((v) => v.toggleKey());
+            }
+        },
+        highlightKey(char) {
+            this.findKey(char).highlightKey();
         },
     };
 }

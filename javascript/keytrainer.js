@@ -20,7 +20,6 @@ patternready.initEvent('patternready', true, true);
 document.addEventListener('patternready', () => {
     $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
     $(window).on('resize', () => resize(window.innerWidth));
-    $(window).on('blur', () => keytrainer.freeKeys());
 });
 $(document).ready(
     () => {
@@ -95,6 +94,8 @@ function Keytrainer() {
 
         load.pattern(null, (data) => {
             pattern.template = data.pattern;
+            keyboard.highlightKey(pattern.next);
+            $(window).on('blur', () => keyboard.freeKeys());
             document.dispatchEvent(patternready);
         });
 
@@ -135,23 +136,24 @@ function Keytrainer() {
                             missprints += 1;
                             controls.missprints.html(String(missprints).padStart(2, '0'));
                         }
+                        keyboard.highlightKey(pattern.next);
                         pattern.renderCurrent(input);
-                        this.findKey(pattern.next).highlightKey();
 
                         if (!pattern.isLast) {
-                            this.findKey(pattern.next).highlightKey();
                             pattern.renderNext();
+                            keyboard.highlightKey(pattern.next);
                         } else {
                             stopwatch.stop();
                             tips.renderTip(tipskeys.newphrase);
-                            this.findKey(' ').highlightKey();
+                            keyboard.highlightKey(' ');
                         }
                     }
                 } else if (input === ' ') {
                     load.pattern(null, (data) => {
                         pattern.template = data.pattern;
                         tips.renderTip(tipskeys.random);
-                        this.findKey(' ').highlightKey();
+                        keyboard.highlightKey(' ');
+                        keyboard.highlightKey(pattern.next);
                     });
                 }
                 key.toggleKey();
@@ -175,37 +177,10 @@ function Keytrainer() {
          */
         trackKey(e) {
             if (this.preventDefault) e.preventDefault();
-            const key = this.findKey(e.key, e.code);
+            const key = keyboard.findKey(e.key, e.code);
             if (!key) return;
             if (e.type === 'keydown') this.keyDown(key, e.key);
             if (e.type === 'keyup') this.keyUp(key);
-        },
-        /**
-         * Unpress all pressed keys for example when window focused out
-         * @method freeKeys
-         */
-        freeKeys() {
-            if (keyboard.keys) {
-                keyboard.keys
-                    .filter((v) => v.isDown)
-                    .forEach((v) => v.toggleKey());
-            }
-        },
-        /**
-         * Search key by char or keyCode returned by event object
-         * @param {string} char
-         * @param {string} keyCode
-         * @returns {object} Returns keyboard key object @see {Key}
-         */
-        findKey(char, keyCode) {
-            if (keyboard.keys) {
-                return keyboard.keys.filter(
-                    (k) => ((k.isSpecial && char !== ' ')
-                        ? k.lowercaseKey === keyCode
-                        : k.lowercaseKey === char || k.uppercaseKey === char),
-                )[0];
-            }
-            return null;
         },
         get preventDefault() { return preventDefault; },
         set preventDefault(value) { preventDefault = value; },
