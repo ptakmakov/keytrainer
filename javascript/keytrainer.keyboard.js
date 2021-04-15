@@ -1,20 +1,10 @@
+/* eslint-disable import/extensions */
+import * as css from './keytrainer.css.js';
 /* eslint-disable no-undef */
 /**
  * HTML element used for render keyboard
  */
 const divElement = '<div/>';
-/**
- * CSS classes, other CSS classes defined in json layout in first element of key array
- */
-const keysrowCSS = 'keys-row';
-const keysrowsDelimiterCSS = 'keys-delimiter';
-const highlightedCSS = 'highlighted';
-const keyrowCSS = 'key-row';
-const keycellCSS = 'key-cell';
-const keyspecialCSS = 'key-special';
-const fingerdownCSS = '-d';
-const backslashCSS = 'Backslash';
-const keyCSS = 'key';
 /**
  * In other than ru or en-us layouts the backslash key can have other than \ value
  * and can be modified by outside script before keyboard initialized and rendered
@@ -39,7 +29,7 @@ function jQueryElement(o) {
  */
 function keysRow() {
     return jQueryElement({
-        class: keysrowCSS,
+        class: css.keysrow,
     });
 }
 /**
@@ -48,23 +38,23 @@ function keysRow() {
  */
 function delimiter() {
     return jQueryElement({
-        class: keysrowsDelimiterCSS,
+        class: css.delimiter,
     });
 }
 function keyRow() {
     return jQueryElement({
-        class: keyrowCSS,
+        class: css.keyrow,
     });
 }
 function keyCell(text) {
     return jQueryElement({
-        class: keycellCSS,
+        class: css.keycell,
         text,
     });
 }
 function keySpecial(text) {
     return jQueryElement({
-        class: keyspecialCSS,
+        class: css.keyspecial,
         text,
     });
 }
@@ -93,8 +83,8 @@ function Key(key) {
     const isSpecial = lowercaseKey.length > 1;
     const isBackSlash = lowercaseKey === backslash.value;
     let classCSS = (isSpecial || isBackSlash)
-        ? lowercaseKey.replace(backslash.value, backslashCSS)
-        : keyCSS;
+        ? lowercaseKey.replace(backslash.value, css.backslash)
+        : css.key;
     classCSS += ` ${fingerCSS}`;
     const keyElement = jQueryElement({ class: classCSS });
     function render() {
@@ -120,13 +110,13 @@ function Key(key) {
             this.isDown = !this.isDown;
         },
         highlightKey() {
-            this.keyElement.toggleClass(highlightedCSS);
+            this.keyElement.toggleClass(css.highlighted);
         },
         lowercaseKey,
         uppercaseKey,
         class: classCSS,
         fingerCSS,
-        fingerDownCSS: fingerCSS + fingerdownCSS,
+        fingerDownCSS: fingerCSS + css.fingerdown,
         isBackSlash,
         isSpecial,
         keyElement,
@@ -174,15 +164,13 @@ function Keyboard() {
          */
         keys: keyObjects,
         /**
-         *
+         * @method init
          * @param {string} data JSON keyboard array[keyboard rows array[keyboard keys array[]]]
-         * @param {callback} callback any callback function
          */
-        init(data, callback) {
+        init(data) {
             this.keyboardElement.html('');
             render(data);
-            callback();
         },
     };
 }
-export { backslash, Keyboard };
+export { Keyboard as default, backslash };
