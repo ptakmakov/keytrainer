@@ -6,21 +6,9 @@ import Controls from './keytrainer.controls.js';
 import Tips, { tipskeys } from './keytrainer.tips.js';
 import Load from './keytrainer.load.js';
 import Pattern from './keytrainer.pattern.js';
-// import * as css from './keytrainer.css.js';
 
 let keytrainer;
-/**
- * patternready event
- * @event patternready
- * @fires Keytrainer.trackKey(e)
- */
-const patternready = document.createEvent('Event');
-patternready.initEvent('patternready', true, true);
 
-document.addEventListener('patternready', () => {
-    $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
-    $(window).on('resize', () => resize(window.innerWidth));
-});
 $(document).ready(
     () => {
         backslash.value = '\\';
@@ -29,6 +17,8 @@ $(document).ready(
         keytrainer = window.keytrainer;
         widthRatio.value = 65;
         resize(window.innerWidth);
+        $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
+        $(window).on('resize', () => resize(window.innerWidth));
     },
 );
 /**
@@ -71,11 +61,6 @@ function Keytrainer() {
      * @see Tips
      */
     const tips = new Tips();
-    /**
-     * keys
-     * @private
-     * @property {Array[{object}]} keys Keyboard keys @see Keyboard
-     */
     const pattern = new Pattern();
     let preventDefault = true;
     let missprints = 0;
@@ -96,7 +81,6 @@ function Keytrainer() {
             pattern.template = data.pattern;
             keyboard.highlightKey(pattern.next);
             $(window).on('blur', () => keyboard.freeKeys());
-            document.dispatchEvent(patternready);
         });
 
         stopwatch.delay = 5;
@@ -118,6 +102,9 @@ function Keytrainer() {
             }
             stopwatch.quantity += 1;
         },
+        renderMissprints() {
+            controls.missprints.html(String(missprints).padStart(2, '0'));
+        },
         /**
          * Toggle key pressed when fires keyup event
          * Starts stopwatch and typing speed counter
@@ -134,7 +121,7 @@ function Keytrainer() {
                     if (!key.isSpecial || key.lowercaseKey === 'Space') {
                         if (input !== pattern.next) {
                             missprints += 1;
-                            controls.missprints.html(String(missprints).padStart(2, '0'));
+                            this.renderMissprints();
                         }
                         keyboard.highlightKey(pattern.next);
                         pattern.renderCurrent(input);
@@ -149,6 +136,9 @@ function Keytrainer() {
                         }
                     }
                 } else if (input === ' ') {
+                    missprints = 0;
+                    this.renderMissprints();
+                    stopwatchStarted = false;
                     load.pattern(null, (data) => {
                         pattern.template = data.pattern;
                         tips.renderTip(tipskeys.random);
