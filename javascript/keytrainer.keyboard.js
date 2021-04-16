@@ -163,9 +163,12 @@ function Keyboard() {
          * @param {string} data JSON keyboard array[keyboard rows array[keyboard keys array[]]]
          */
         init(data) {
-            keys = [];
-            this.keyboardElement.html('');
-            render(data);
+            return new Promise((resolve) => {
+                keys = [];
+                this.keyboardElement.html('');
+                render(data);
+                resolve();
+            });
         },
         /**
          * Search key by char or keyCode

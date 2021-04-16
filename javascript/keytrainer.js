@@ -74,13 +74,14 @@ function Keytrainer() {
 
         keyboard.keyboardElement = controls.keyboard;
         load.layout(null, (data) => {
-            keyboard.init(data);
-        });
-
-        load.pattern(null, (data) => {
-            pattern.template = data.pattern;
-            keyboard.highlightKey(pattern.next);
-            $(window).on('blur', () => keyboard.freeKeys());
+            keyboard.init(data).then(() => {
+                load.pattern(null, (patterndata) => {
+                    pattern.init(patterndata.pattern).then((next) => {
+                        keyboard.highlightKey(next);
+                        $(window).on('blur', () => keyboard.freeKeys());
+                    });
+                });
+            });
         });
 
         stopwatch.delay = 5;
@@ -184,12 +185,13 @@ function Keytrainer() {
             });
 
             load.layout(null, (data) => {
-                keyboard.init(data);
-            });
-
-            load.pattern(null, (data) => {
-                pattern.template = data.pattern;
-                keyboard.highlightKey(pattern.next);
+                keyboard.init(data).then(() => {
+                    load.pattern(null, (patterndata) => {
+                        pattern.init(patterndata.pattern).then((next) => {
+                            keyboard.highlightKey(next);
+                        });
+                    });
+                });
             });
         },
     };

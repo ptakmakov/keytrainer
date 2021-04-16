@@ -15,28 +15,31 @@ function Pattern() {
         return (char === ' ') ? '&nbsp;' : char;
     }
     return {
-        set template(data) {
-            position = 0;
-            pattern.html('');
-            keytrainer.html('');
-            template = Array.from(data).map((c, i) => {
-                const isFirst = i === 0;
-                if (isFirst) next = c;
-                // if (isFirst) this.findKey(c).highlightKey();
-                return {
-                    char: c,
-                    input: null,
-                    // eslint-disable-next-line no-undef
-                    charElement: $('<span/>')
-                        .html((isFirst) ? underscore(c) : c)
-                        .addClass((isFirst) ? css.highlighted : css.type)
-                        .appendTo(pattern),
-                    // eslint-disable-next-line no-undef
-                    inputElement: $('<span/>')
-                        .html((isFirst) ? underscore(c) : null)
-                        .addClass((isFirst) ? css.highlighted : null)
-                        .appendTo(keytrainer),
-                };
+        init(data) {
+            return new Promise((resolve) => {
+                position = 0;
+                pattern.html('');
+                keytrainer.html('');
+                template = Array.from(data).map((c, i) => {
+                    const isFirst = i === 0;
+                    if (isFirst) next = c;
+                    // if (isFirst) this.findKey(c).highlightKey();
+                    return {
+                        char: c,
+                        input: null,
+                        // eslint-disable-next-line no-undef
+                        charElement: $('<span/>')
+                            .html((isFirst) ? underscore(c) : c)
+                            .addClass((isFirst) ? css.highlighted : css.type)
+                            .appendTo(pattern),
+                        // eslint-disable-next-line no-undef
+                        inputElement: $('<span/>')
+                            .html((isFirst) ? underscore(c) : null)
+                            .addClass((isFirst) ? css.highlighted : null)
+                            .appendTo(keytrainer),
+                    };
+                });
+                resolve(next);
             });
         },
         renderCurrent(char) {
@@ -53,7 +56,6 @@ function Pattern() {
             o.inputElement.addClass(css.highlighted).html(underscore(o.char));
             o.charElement.addClass(css.highlighted).html(underscore(o.char));
         },
-        get template() { return template; },
         get isLast() { return position === template.length; },
         get next() { return next; },
     };
