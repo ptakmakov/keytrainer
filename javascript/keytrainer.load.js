@@ -7,17 +7,17 @@ function Load() {
         $.getJSON(url, callback);
     }
     return {
-        layoutJSON: '/json/en.json',
-        tipsJSON: '/json/en.tips.json',
-        patternJSON: '/node/en.pattern.js',
+        layoutURL: '/json/en.json',
+        tipsURL: '/json/en.tips.json',
+        patternURL: '/node/en.pattern.js',
         layout(options, callback) {
-            getJSON(this.layoutJSON, callback);
+            getJSON(this.layoutURL, callback);
         },
         pattern(options, callback) {
-            getJSON(this.patternJSON, callback);
+            getJSON(this.patternURL, callback);
         },
         tips(options, callback) {
-            getJSON(this.tipsJSON, callback);
+            getJSON(this.tipsURL, callback);
         },
     };
 }

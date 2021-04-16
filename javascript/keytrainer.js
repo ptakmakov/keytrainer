@@ -68,8 +68,7 @@ function Keytrainer() {
     function init() {
         tips.tip = controls.tips;
         load.tips(null, (data) => {
-            tips.tips = data;
-            tips.renderTip(tipskeys.random);
+            tips.init(data).then(() => tips.renderTip(tipskeys.random));
         });
 
         keyboard.keyboardElement = controls.keyboard;
@@ -175,13 +174,12 @@ function Keytrainer() {
         },
         get preventDefault() { return preventDefault; },
         set preventDefault(value) { preventDefault = value; },
-        changeLayout(lang) {
-            load.tipsJSON = `/json/${lang}.tips.json`;
-            load.layoutJSON = `/json/${lang}.json`;
-            load.patternJSON = `/node/${lang}.pattern.js`;
+        changeLayout(language) {
+            load.tipsURL = `/json/${language}.tips.json`;
+            load.layoutURL = `/json/${language}.json`;
+            load.patternURL = `/node/${language}.pattern.js`;
             load.tips(null, (data) => {
-                tips.tips = data;
-                tips.renderTip(tipskeys.random);
+                tips.init(data).then(() => tips.renderTip(tipskeys.random));
             });
 
             load.layout(null, (data) => {

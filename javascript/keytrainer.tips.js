@@ -4,8 +4,9 @@ function Tips() {
     let tips;
     let tip;
     return {
-        set tips(data) { tips = data; },
-        get tips() { return tips; },
+        init(data) {
+            return new Promise((resolve) => { tips = data; resolve(); });
+        },
         set tip(o) { tip = o; },
         get tip() { return tip; },
         renderTip(key) {
