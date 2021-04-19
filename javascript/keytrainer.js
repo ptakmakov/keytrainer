@@ -1,12 +1,13 @@
 /* eslint-disable import/extensions, no-undef */
 import Keyboard, { backslash } from './keytrainer.keyboard.js';
 import Stopwatch from './stopwatch.js';
-import { resize, widthRatio } from './resize.js';
+import { resize, widthRatio, screenWidth } from './resize.js';
 import Controls from './keytrainer.controls.js';
 import Tips, { tipskeys } from './keytrainer.tips.js';
 import Load from './keytrainer.load.js';
 import Pattern from './keytrainer.pattern.js';
 
+// eslint-disable-next-line import/no-mutable-exports
 let keytrainer;
 
 $(document).ready(
@@ -16,6 +17,7 @@ $(document).ready(
         window.keytrainer = new Keytrainer();
         keytrainer = window.keytrainer;
         widthRatio.value = 65;
+        screenWidth.value = window.screen.width;
         resize(window.innerWidth);
         $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
         $(window).on('resize', () => resize(window.innerWidth));
@@ -194,3 +196,4 @@ function Keytrainer() {
         },
     };
 }
+// export { keytrainer as default };

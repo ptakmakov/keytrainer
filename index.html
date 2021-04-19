@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jura:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/palette.css" />
     <link rel="stylesheet" type="text/css" href="/css/keytrainer.css" />
-    <title>Simple Keyboard Trainer</title>
+    <title>Simple Keyboard Simulator</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="module" src="/javascript/keytrainer.js"></script>
 </head>
@@ -20,7 +20,6 @@
             <div class="panel dark-p-bg text-p-c">
                 <div class="panel-link"><a class="text-p-c" href="#">ABOUT</a></div>
                 <div class="panel-link"><a class="text-p-c" href="/">TRAINER</a></div>
-                <div class="panel-link"><a class="text-p-c" href="#">LAYOUT</a></div>
             </div>
         </div>
         <div class="center">
@@ -52,8 +51,17 @@
         </div>
         <div class="center">
             <div class="infopanel p-text-c">
-                Time: <span class="stopwatch">00:00</span> Missprints: <span class="missprints">00</span> Speed: <span
-                    class="speed">0000</span> symbols/minute</span>
+                <div style="display: table-cell; width: 99%;">
+                    Time: <span class="stopwatch">00:00</span>
+                    Missprints: <span class="missprints">00</span>
+                    Speed: <span class="speed">0000</span> symbols/minute</span>
+                </div>
+                <div style="display: table-cell; padding: 0px 3px 0px 3px;">
+                    <a href="#layout-language=ru" onclick="keytrainer.changeLayout('ru')"><img class="flag-icon" src="./images/ru.png" title="russian keyboard layout"></a>
+                </div>
+                <div style="display: table-cell; padding: 2px 3px 0px 3px;">
+                    <a href="#layout-language=en" onclick="keytrainer.changeLayout('en')"><img class="flag-icon" src="./images/en.png" title="english keyboard layout"></a>
+                </div>
             </div>
         </div>
         <div class="center">

@@ -34,6 +34,13 @@ body {
     text-decoration: none;
 }
 
+.flag-icon {
+    border: 1px solid #43a047;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+}
+
 .content {
     width: 100%;
     height: 100%;
@@ -75,9 +82,15 @@ body {
     width: 40.4em;
     text-align: justify;
     border-radius: 0.2em;
-    padding: 10px 5px 10px 5px;
     word-wrap: break-word;
     word-break: break-all;
+}
+
+.keytrainer,
+.keytrainer-pattern,
+.tips,
+.infopanel {
+    padding: 10px 5px 10px 5px;
 }
 
 .keytrainer-pattern {
