@@ -1,155 +1,199 @@
-/* eslint-disable import/extensions */
-import { backslash, Keyboard } from './keytrainer.keyboard.js';
+/* eslint-disable import/extensions, no-undef */
+import Keyboard, { backslash } from './keytrainer.keyboard.js';
 import Stopwatch from './stopwatch.js';
-import { resize, widthRatio } from './resize.js';
+import { resize, widthRatio, screenWidth } from './resize.js';
+import Controls from './keytrainer.controls.js';
+import Tips, { tipskeys } from './keytrainer.tips.js';
+import Load from './keytrainer.load.js';
+import Pattern from './keytrainer.pattern.js';
 
+// eslint-disable-next-line import/no-mutable-exports
 let keytrainer;
-/**
- * Document elements selectors
- */
-const patternSelector = '.keytrainer-pattern';
-const keytrainerSelector = '.keytrainer';
-const timerSelector = '.timer';
-const speedSelector = '.speed';
-/**
- * CSS classes, other CSS classes defined in json layout in first element of key array
- */
-const highlightedCSS = 'highlighted';
-const typeCSS = 'type';
-/**
-* Default URLs
-*/
-const layoutJSON = '/json/en.json';
-const patternJSON = '/node/pattern.js';
-/**
- * keyboardready event
- * @event keyboardready
- * @fires () assign keyboard.keys to keyitrainer.keys
- */
-const keyboardready = document.createEvent('Event');
-keyboardready.initEvent('keyboardready', true, true);
-/**
-  * patternready event
-  * @event patternready
-  * @fires Keytrainer.trackKey(e)
-  */
-const patternready = document.createEvent('Event');
-patternready.initEvent('patternready', true, true);
 
-// eslint-disable-next-line no-undef
 $(document).ready(
     () => {
         backslash.value = '\\';
-        // prod
-        // keytrainer = Keytrainer();
-        // dev
         // eslint-disable-next-line no-use-before-define
         window.keytrainer = new Keytrainer();
         keytrainer = window.keytrainer;
-        keytrainer.keyboard = new Keyboard();
-        keytrainer.keyboard.init(layoutJSON, () => document.dispatchEvent(keyboardready));
-        keytrainer.getPattern(patternJSON, () => document.dispatchEvent(patternready));
-        keytrainer.stopwatch = new Stopwatch();
-        keytrainer.stopwatch.delay = 5;
-        keytrainer.stopwatch.format = 'mm:ss';
-        keytrainer.stopwatch.timerElement = keytrainer.timerElement;
-        keytrainer.stopwatch.speedElement = keytrainer.speedElement;
-        widthRatio.value = 6.5;
+        widthRatio.value = 65;
+        screenWidth.value = window.screen.width;
         resize(window.innerWidth);
+        $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
+        $(window).on('resize', () => resize(window.innerWidth));
     },
 );
-
+/**
+ * Object controls user input, compares it with pattern, counts
+ * speed and mistakes, teaches for blind keyboard typing
+ * @typedef Keytrainer
+ * @returns {object} Keytrainer
+ */
 function Keytrainer() {
-    const preventDefault = true;
+    /**
+     * load
+     * @private
+     * @property {object} load Loads necessary JSON sources
+     */
+    const load = new Load();
+    /**
+     * controls
+     * @private
+     * @property {object} controls HTML controls for keyboard simulator
+     */
+    const controls = new Controls();
+    /**
+     * keyboard
+     * @private
+     * @property {object} keyboard Renders keyboard, create keys array of objects key
+     * @see Keyboard.keys
+     */
+    const keyboard = new Keyboard();
+    /**
+     * stopwatch
+     * @private
+     * @property {object} stopwatch Renders stopwatch
+     * @see Stopwatch
+     */
+    const stopwatch = new Stopwatch();
+    /**
+     * tips
+     * @private
+     * @property {object} tips Contains object with tips, errors and other informational phrases
+     * @see Tips
+     */
+    const tips = new Tips();
+    const pattern = new Pattern();
+    let preventDefault = true;
+    let missprints = 0;
+    let stopwatchStarted = false;
+    function init() {
+        tips.tip = controls.tips;
+        load.tips(null, (data) => {
+            tips.init(data).then(() => tips.renderTip(tipskeys.random));
+        });
+
+        keyboard.keyboardElement = controls.keyboard;
+        load.layout(null, (data) => {
+            keyboard.init(data).then(() => {
+                load.pattern(null, (patterndata) => {
+                    pattern.init(patterndata.pattern).then((next) => {
+                        keyboard.highlightKey(next);
+                        $(window).on('blur', () => keyboard.freeKeys());
+                    });
+                });
+            });
+        });
+
+        stopwatch.delay = 5;
+        stopwatch.format = 'mm:ss';
+        stopwatch.stopwatch = controls.stopwatch;
+        stopwatch.speedmeter = controls.speedmeter;
+    } init();
     return {
-        // eslint-disable-next-line no-undef
-        patternElement: $(patternSelector),
-        // eslint-disable-next-line no-undef
-        keytrainerElement: $(keytrainerSelector),
-        // eslint-disable-next-line no-undef
-        timerElement: $(timerSelector),
-        // eslint-disable-next-line no-undef
-        speedElement: $(speedSelector),
-        keyboard: null,
-        stopwatch: null,
-        keys: [],
-        pattern: [],
-        position: 0,
-        keyDown(key) {
+        /**
+         * Starts counting typing speed
+         * @method startStopwatch
+         */
+        startStopwatch() {
+            if (!stopwatchStarted) {
+                stopwatch.reset();
+                stopwatch.start();
+                stopwatch.quantity = 0;
+                stopwatchStarted = true;
+            }
+            stopwatch.quantity += 1;
+        },
+        renderMissprints() {
+            controls.missprints.html(String(missprints).padStart(2, '0'));
+        },
+        /**
+         * Toggle key pressed when fires keyup event
+         * Starts stopwatch and typing speed counter
+         * Controls keytrainer pattern and input
+         * @method keyDown
+         * @param {object} key Key object @see {Key}
+         * @param {string} input Pressed keyboard key value
+         */
+        keyDown(key, input) {
             if (!key.isDown) {
-                key.Toggle();
+                if (!pattern.isLast) {
+                    this.startStopwatch();
+
+                    if (!key.isSpecial || key.lowercaseKey === 'Space') {
+                        if (input !== pattern.next) {
+                            missprints += 1;
+                            this.renderMissprints();
+                        }
+                        keyboard.highlightKey(pattern.next);
+                        pattern.renderCurrent(input);
+
+                        if (!pattern.isLast) {
+                            pattern.renderNext();
+                            keyboard.highlightKey(pattern.next);
+                        } else {
+                            stopwatch.stop();
+                            tips.renderTip(tipskeys.newphrase);
+                            keyboard.highlightKey(' ');
+                        }
+                    }
+                } else if (input === ' ') {
+                    missprints = 0;
+                    this.renderMissprints();
+                    stopwatchStarted = false;
+                    load.pattern(null, (data) => {
+                        pattern.template = data.pattern;
+                        tips.renderTip(tipskeys.random);
+                        keyboard.highlightKey(' ');
+                        keyboard.highlightKey(pattern.next);
+                    });
+                }
+                key.toggleKey();
             }
         },
+        /**
+         * Toggle key unpressed when fires keyup event
+         * @method keyUp
+         * @param {object} key Key object @see {Key}
+         */
         keyUp(key) {
             if (key.isDown) {
-                key.Toggle();
+                key.toggleKey();
             }
         },
         /**
          * Tracks events keydown, keypress, keyup
          * Controlls keyboard behavior
+         * @method trackKey
          * @param {Event} e keyboard event
          */
         trackKey(e) {
             if (this.preventDefault) e.preventDefault();
-            const key = this.findKey(e.key, e.code);
+            const key = keyboard.findKey(e.key, e.code);
             if (!key) return;
-            switch (e.type) {
-            case 'keydown': this.keyDown(key);
-                break;
-            case 'keyup': this.keyUp(key);
-                break;
-            default:
-                break;
-            }
-        },
-        /**
-         * Get JSON from url and create pattern and keytrainer HTML elements
-         * @param {String} src URL to JSON whith keyboard layout
-         * @param {Function} callback called when ready
-         */
-        getPattern(src, callback) {
-            this.pattern = [];
-            this.position = 0;
-            this.patternElement.html('');
-            this.keytrainerElement.html('');
-            // eslint-disable-next-line no-undef
-            $.getJSON(src, (data) => {
-                this.pattern = Array.from(data.pattern).map((c, i) => {
-                    const isFirst = i === 0;
-                    return {
-                        char: c,
-                        input: null,
-                        // eslint-disable-next-line no-undef
-                        charElement: $('<span/>')
-                            .text(c)
-                            .addClass((isFirst) ? highlightedCSS : typeCSS)
-                            .appendTo(this.patternElement),
-                        // eslint-disable-next-line no-undef
-                        inputElement: $('<span/>')
-                            .text((isFirst) ? c : null)
-                            .addClass((isFirst) ? highlightedCSS : null)
-                            .appendTo(this.keytrainerElement),
-                    };
-                });
-                callback();
-            });
-        },
-        findKey(key, keyCode) {
-            return this.keys.filter(
-                (k) => ((k.isSpecial)
-                    ? k.lowercaseKey === keyCode
-                    : k.lowercaseKey === key || k.uppercaseKey === key),
-            )[0];
+            if (e.type === 'keydown') this.keyDown(key, e.key);
+            if (e.type === 'keyup') this.keyUp(key);
         },
         get preventDefault() { return preventDefault; },
+        set preventDefault(value) { preventDefault = value; },
+        changeLayout(language) {
+            load.tipsURL = `/json/${language}.tips.json`;
+            load.layoutURL = `/json/${language}.json`;
+            load.patternURL = `/node/${language}.pattern.js`;
+            load.tips(null, (data) => {
+                tips.init(data).then(() => tips.renderTip(tipskeys.random));
+            });
+
+            load.layout(null, (data) => {
+                keyboard.init(data).then(() => {
+                    load.pattern(null, (patterndata) => {
+                        pattern.init(patterndata.pattern).then((next) => {
+                            keyboard.highlightKey(next);
+                        });
+                    });
+                });
+            });
+        },
     };
 }
-
-document.addEventListener('keyboardready', () => { keytrainer.keys = keytrainer.keyboard.keys; });
-document.addEventListener('patternready', () => {
-    // eslint-disable-next-line no-undef
-    $(window).on('keypress keydown keyup', (e) => { keytrainer.trackKey(e); });
-    // eslint-disable-next-line no-undef
-    $(window).on('resize', () => resize(window.innerWidth));
-});
+// export { keytrainer as default };

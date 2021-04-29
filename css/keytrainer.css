@@ -1,6 +1,7 @@
 body {
     margin: 0;
     font-family: Jura, sans-serif, Helvetica;
+    font-size: 100%;
 }
 /**/
 .panel {
@@ -31,6 +32,13 @@ body {
 .panel-link a:active {
     color: #e6ee9c;
     text-decoration: none;
+}
+
+.flag-icon {
+    border: 1px solid #43a047;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
 }
 
 .content {
@@ -74,9 +82,15 @@ body {
     width: 40.4em;
     text-align: justify;
     border-radius: 0.2em;
-    padding: 10px 5px 10px 5px;
     word-wrap: break-word;
     word-break: break-all;
+}
+
+.keytrainer,
+.keytrainer-pattern,
+.tips,
+.infopanel {
+    padding: 10px 5px 10px 5px;
 }
 
 .keytrainer-pattern {
@@ -91,7 +105,7 @@ body {
     border: 1px solid #43a047;
 }
 
-.timer {
+.stopwatch {
     color: #66bb6a;
 }
 
@@ -99,7 +113,7 @@ body {
     color: #66bb6a;
 }
 
-.mistakes {
+.missprints {
     color: #ff8a65;
 }
 

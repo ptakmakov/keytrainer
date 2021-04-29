@@ -1,23 +1,10 @@
-/**
- * Document elements selectors
- */
-const keyboardSelector = '.keyboard';
+/* eslint-disable import/extensions */
+import * as css from './keytrainer.css.js';
+/* eslint-disable no-undef */
 /**
  * HTML element used for render keyboard
  */
 const divElement = '<div/>';
-/**
- * CSS classes, other CSS classes defined in json layout in first element of key array
- */
-const keysrowCSS = 'keys-row';
-const keysrowsDelimiterCSS = 'keys-delimiter';
-const highlightedCSS = 'highlighted';
-const keyrowCSS = 'key-row';
-const keycellCSS = 'key-cell';
-const keyspecialCSS = 'key-special';
-const fingerdownCSS = '-d';
-const backslashCSS = 'Backslash';
-const keyCSS = 'key';
 /**
  * In other than ru or en-us layouts the backslash key can have other than \ value
  * and can be modified by outside script before keyboard initialized and rendered
@@ -34,7 +21,6 @@ const backslash = (function Backslash() {
  * @returns {object} JQuery object <div/> with or without attributes
  */
 function jQueryElement(o) {
-    // eslint-disable-next-line no-undef
     return $(divElement, o);
 }
 /**
@@ -43,7 +29,7 @@ function jQueryElement(o) {
  */
 function keysRow() {
     return jQueryElement({
-        class: keysrowCSS,
+        class: css.keysrow,
     });
 }
 /**
@@ -52,23 +38,23 @@ function keysRow() {
  */
 function delimiter() {
     return jQueryElement({
-        class: keysrowsDelimiterCSS,
+        class: css.delimiter,
     });
 }
 function keyRow() {
     return jQueryElement({
-        class: keyrowCSS,
+        class: css.keyrow,
     });
 }
 function keyCell(text) {
     return jQueryElement({
-        class: keycellCSS,
+        class: css.keycell,
         text,
     });
 }
 function keySpecial(text) {
     return jQueryElement({
-        class: keyspecialCSS,
+        class: css.keyspecial,
         text,
     });
 }
@@ -97,8 +83,8 @@ function Key(key) {
     const isSpecial = lowercaseKey.length > 1;
     const isBackSlash = lowercaseKey === backslash.value;
     let classCSS = (isSpecial || isBackSlash)
-        ? lowercaseKey.replace(backslash.value, backslashCSS)
-        : keyCSS;
+        ? lowercaseKey.replace(backslash.value, css.backslash)
+        : css.key;
     classCSS += ` ${fingerCSS}`;
     const keyElement = jQueryElement({ class: classCSS });
     function render() {
@@ -119,18 +105,18 @@ function Key(key) {
         }
     } render();
     return {
-        Toggle() {
+        toggleKey() {
             this.keyElement.toggleClass(this.fingerCSS).toggleClass(this.fingerDownCSS);
             this.isDown = !this.isDown;
         },
-        Highlight() {
-            this.keyElement.toggleClass(highlightedCSS);
+        highlightKey() {
+            this.keyElement.toggleClass(css.highlighted);
         },
         lowercaseKey,
         uppercaseKey,
         class: classCSS,
         fingerCSS,
-        fingerDownCSS: fingerCSS + fingerdownCSS,
+        fingerDownCSS: fingerCSS + css.fingerdown,
         isBackSlash,
         isSpecial,
         keyElement,
@@ -148,40 +134,72 @@ function Key(key) {
  * @property {array} keys array of Key objects @see Key
  */
 function Keyboard() {
-    const keyObjects = [];
+    let keys = [];
     let keyboardElement;
     function render(rows) {
         rows.forEach(
-            (keys, i, a) => {
+            (rowkeys, i, a) => {
                 const row = keysRow().appendTo(keyboardElement);
-                keys.forEach(
+                rowkeys.forEach(
                     (k) => {
                         const key = new Key(k);
                         key.keyElement.appendTo(row);
-                        keyObjects.push(key);
-                    }, row, keyObjects,
+                        keys.push(key);
+                    }, row, keys,
                 );
                 if (i + 1 < a.length) delimiter().appendTo(keyboardElement);
             },
         );
     }
     return {
-    /**
-     * Property keys
-     * @returns {Array[{Object}...]} Returns array of objects type of Key
-     */
-        keys: keyObjects,
         /**
-     *
-     * @param {string} src URL to json keyboard array[keyboard rows array[keyboard keys array[]]]
-     * @param {callback} callback any callback function
-     */
-        init(src, callback) {
-            // eslint-disable-next-line no-undef
-            keyboardElement = $(keyboardSelector).html('');
-            // eslint-disable-next-line no-undef
-            $.getJSON(src, (data) => { render(data); callback(); });
+         * @property {object} keyboardElement jQuery object
+         * @param {object} value jQuery object
+         */
+        set keyboardElement(value) { keyboardElement = value; },
+        get keyboardElement() { return keyboardElement; },
+        /**
+         * @method init
+         * @param {string} data JSON keyboard array[keyboard rows array[keyboard keys array[]]]
+         */
+        init(data) {
+            return new Promise((resolve) => {
+                keys = [];
+                this.keyboardElement.html('');
+                render(data);
+                resolve();
+            });
+        },
+        /**
+         * Search key by char or keyCode
+         * @param {string} char
+         * @param {string} keyCode
+         * @returns {object} Returns keyboard key object @see {Key}
+         */
+        findKey(char, keyCode) {
+            if (keys) {
+                return keys.filter(
+                    (k) => ((k.isSpecial && char !== ' ')
+                        ? k.lowercaseKey === keyCode
+                        : k.lowercaseKey === char || k.uppercaseKey === char),
+                )[0];
+            }
+            return null;
+        },
+        /**
+         * Unpress all pressed keys for example when window focused out
+         * @method freeKeys
+         */
+        freeKeys() {
+            if (keys) {
+                keys
+                    .filter((v) => v.isDown)
+                    .forEach((v) => v.toggleKey());
+            }
+        },
+        highlightKey(char) {
+            this.findKey(char).highlightKey();
         },
     };
 }
-export { backslash, Keyboard };
+export { Keyboard as default, backslash };
