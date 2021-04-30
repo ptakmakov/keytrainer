@@ -5,17 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="Description" content="Keyboard Trainer, simple programm for fast blind typing start" />
-    <!--link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Podkova"-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jura">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo 2">
-    <link rel="stylesheet" type="text/css" href="css/palette.css" />
-    <link rel="stylesheet" type="text/css" href="css/dynamic.css" />
-    <title>Simple Keyboard Trainer</title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/javascript/stopwatch.js"></script>
-    <script type="text/javascript" src="/javascript/keytrainer.keyboard.js"></script>
-    <script type="text/javascript" src="/javascript/keytrainer.js"></script>
-    <!--script type="text/javascript" src="/javascript/keytrainer.layout.js"></script-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/palette.css" />
+    <link rel="stylesheet" type="text/css" href="/css/keytrainer.css" />
+    <title>Simple Keyboard Simulator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="module" src="/javascript/keytrainer.js"></script>
 </head>
 
 <body>
@@ -24,7 +20,6 @@
             <div class="panel dark-p-bg text-p-c">
                 <div class="panel-link"><a class="text-p-c" href="#">ABOUT</a></div>
                 <div class="panel-link"><a class="text-p-c" href="/">TRAINER</a></div>
-                <div class="panel-link"><a class="text-p-c" href="#">LAYOUT</a></div>
             </div>
         </div>
         <div class="center">
@@ -38,7 +33,8 @@
         </div>
         <div class="center">
             <div class="keytrainer-pattern text-p-c">
-                <span class="typed">Text for type </span><span class="highlighted">a</span><span class="type">nd highlighted
+                <span class="typed">Text for type </span><span class="highlighted">a</span><span class="type">nd
+                    highlighted
                     character</span>
             </div>
         </div>
@@ -55,7 +51,17 @@
         </div>
         <div class="center">
             <div class="infopanel p-text-c">
-                Time: <span class="timer">00:00</span> Mistakes: <span class="mistakes">00</span> Speed: <span class="speed">0000</span> symbols/minute</span>
+                <div style="display: table-cell; width: 99%;">
+                    Time: <span class="stopwatch">00:00</span>
+                    Missprints: <span class="missprints">00</span>
+                    Speed: <span class="speed">0000</span> symbols/minute</span>
+                </div>
+                <div style="display: table-cell; padding: 0px 3px 0px 3px;">
+                    <a href="#layout-language=ru" onclick="keytrainer.changeLayout('ru')"><img class="flag-icon" src="./images/ru.png" title="russian keyboard layout"></a>
+                </div>
+                <div style="display: table-cell; padding: 2px 3px 0px 3px;">
+                    <a href="#layout-language=en" onclick="keytrainer.changeLayout('en')"><img class="flag-icon" src="./images/en.png" title="english keyboard layout"></a>
+                </div>
             </div>
         </div>
         <div class="center">
