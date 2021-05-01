@@ -33,7 +33,7 @@ function Keytrainer() {
     /**
      * load
      * @private
-     * @property {object} load Loads necessary JSON sources
+     * @property {object} load Loads necessary JSON sources @see Load
      */
     const load = new Load();
     /**
@@ -63,10 +63,36 @@ function Keytrainer() {
      * @see Tips
      */
     const tips = new Tips();
+    /**
+     * pattern
+     * @private
+     * @property {object} pattern Contains object with typing template and typed characters
+     * @see Pattern
+     */
     const pattern = new Pattern();
+    /**
+     * preventDefault
+     * @private
+     * @property {bool} preventDefault If true default special keys actions will be canceled
+     */
     let preventDefault = true;
+    /**
+     * missprints
+     * @private
+     * @property {Number} missprints Count of missprints in current pattern
+     */
     let missprints = 0;
+    /**
+     * stopwatchStarted
+     * @private
+     * @property {bool} stopwatchStarted Indicates if stopwatch is started
+     */
     let stopwatchStarted = false;
+    /**
+     * init
+     * @private
+     * @method init Initialize Keytrainer object, loads tips, keyboard layout, pattern
+     */
     function init() {
         tips.tip = controls.tips;
         load.tips(null, (data) => {
@@ -92,8 +118,8 @@ function Keytrainer() {
     } init();
     return {
         /**
-         * Starts counting typing speed
-         * @method startStopwatch
+         * startStopwatch
+         * @method startStopwatch Starts counting typing speed
          */
         startStopwatch() {
             if (!stopwatchStarted) {
@@ -104,6 +130,10 @@ function Keytrainer() {
             }
             stopwatch.quantity += 1;
         },
+        /**
+         * renderMissprints
+         * @method renderMissprints Write count of current missprints
+         */
         renderMissprints() {
             controls.missprints.html(String(missprints).padStart(2, '0'));
         },
@@ -118,9 +148,8 @@ function Keytrainer() {
         keyDown(key, input) {
             if (!key.isDown) {
                 if (!pattern.isLast) {
-                    this.startStopwatch();
-
                     if (!key.isSpecial || key.lowercaseKey === 'Space') {
+                        this.startStopwatch();
                         if (input !== pattern.next) {
                             missprints += 1;
                             this.renderMissprints();
@@ -141,11 +170,12 @@ function Keytrainer() {
                     missprints = 0;
                     this.renderMissprints();
                     stopwatchStarted = false;
-                    load.pattern(null, (data) => {
-                        pattern.template = data.pattern;
-                        tips.renderTip(tipskeys.random);
-                        keyboard.highlightKey(' ');
-                        keyboard.highlightKey(pattern.next);
+                    load.pattern(null, (patterndata) => {
+                        pattern.init(patterndata.pattern).then(() => {
+                            tips.renderTip(tipskeys.random);
+                            keyboard.highlightKey(' ');
+                            keyboard.highlightKey(pattern.next);
+                        });
                     });
                 }
                 key.toggleKey();
@@ -176,6 +206,11 @@ function Keytrainer() {
         },
         get preventDefault() { return preventDefault; },
         set preventDefault(value) { preventDefault = value; },
+        /**
+         * Change/reload current layout
+         * @method changeLayout
+         * @param {string} language Layout language
+         */
         changeLayout(language) {
             load.tipsURL = `/json/${language}.tips.json`;
             load.layoutURL = `/json/${language}.json`;
