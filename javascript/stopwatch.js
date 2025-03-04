@@ -48,15 +48,13 @@ function Stopwatch(delay = 10) {
                     () => {
                         currentTime = Date.now();
                         if (stopwatch) {
-                            stopwatch.text(
-                                (defaultFormat)
-                                    ? this.toString(defaultFormat)
-                                    : this.toString(),
-                            );
+                            stopwatch.textContent = (defaultFormat)
+                                ? this.toString(defaultFormat)
+                                : this.toString();
                         }
                         if (speedmeter) {
                             speedmeter
-                                .text(padNum(this.speedPerMinute(quantityOfWhatever), 4));
+                                .textContent = padNum(this.speedPerMinute(quantityOfWhatever), 4);
                         }
                     },
                     updateDelay,

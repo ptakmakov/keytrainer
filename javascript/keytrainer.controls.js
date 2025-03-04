@@ -11,19 +11,19 @@ const tipsSelector = '.tips';
 function Controls() {
     return {
         // eslint-disable-next-line no-undef
-        keyboard: $(keyboardSelector),
+        keyboard: document.querySelector(keyboardSelector),
         // eslint-disable-next-line no-undef
-        pattern: $(patternSelector),
+        pattern: document.querySelector(patternSelector),
         // eslint-disable-next-line no-undef
-        keytrainer: $(keytrainerSelector),
+        keytrainer: document.querySelector(keytrainerSelector),
         // eslint-disable-next-line no-undef
-        stopwatch: $(stopwatchSelector),
+        stopwatch: document.querySelector(stopwatchSelector),
         // eslint-disable-next-line no-undef
-        speedmeter: $(speedSelector),
+        speedmeter: document.querySelector(speedSelector),
         // eslint-disable-next-line no-undef
-        missprints: $(missprintsSelector),
+        missprints: document.querySelector(missprintsSelector),
         // eslint-disable-next-line no-undef
-        tips: $(tipsSelector),
+        tips: document.querySelector(tipsSelector),
     };
 }
 export { Controls as default };
