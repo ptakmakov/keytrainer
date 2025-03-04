@@ -221,22 +221,25 @@ body {
 
 .Backslash {
     border-radius: 0.2em;
+    height: 2.4em;
 }
 
 div[class~=Backslash] .key-row {
     display: flex;
     justify-content: center;
+    height: 50%;
 }
 
 .key-row {
     display: flex;
     justify-content: center;
+    height: 50%;
 }
 
 .key {
     border-radius: 0.2em;
     height: 2.4em;
-    line-height: 120%;
+    /* line-height: 120%; */
 }
 
 .key,
@@ -279,9 +282,11 @@ div[class~=Backslash] .key-row {
 
 .key-cell {
     width: 50%;
-    height: 50%;
-    display: table-cell;
+    display: flex; /* Change display */
     text-align: center;
+    align-items: center; /* Center text vertically */
+    justify-content: center; /* Center text horizontally */
+    padding-bottom: 0.2em; /* Add padding for descenders */
 }
 
 .keys-delimiter {
@@ -331,3 +336,15 @@ div[class~=Backslash] .key-row {
 .lf-d {
     background: #ff8a65;
 }
+
+.infopanel {
+    display: flex;
+    justify-content: space-around;
+  }
+  .infopanel-items {
+    width: 99%;
+  }
+  .infopanel-flags {
+    padding: 0px 3px 0px 3px;
+  }
+  

@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="/css/palette.css" />
     <link rel="stylesheet" type="text/css" href="/css/keytrainer.css" />
     <title>Simple Keyboard Simulator</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="module" src="/javascript/keytrainer.js"></script>
 </head>
 
@@ -51,16 +50,16 @@
         </div>
         <div class="center">
             <div class="infopanel p-text-c">
-                <div style="display: table-cell; width: 99%;">
+                <div class="infopanel-items">
                     Time: <span class="stopwatch">00:00</span>
                     Missprints: <span class="missprints">00</span>
                     Speed: <span class="speed">0000</span> symbols/minute</span>
                 </div>
-                <div style="display: table-cell; padding: 0px 3px 0px 3px;">
-                    <a href="#layout-language=ru" onclick="keytrainer.changeLayout('ru')"><img class="flag-icon" src="./images/ru.png" title="russian keyboard layout"></a>
-                </div>
-                <div style="display: table-cell; padding: 2px 3px 0px 3px;">
+                <div class="infopanel-flags">
                     <a href="#layout-language=en" onclick="keytrainer.changeLayout('en')"><img class="flag-icon" src="./images/en.png" title="english keyboard layout"></a>
+                </div>
+                <div class="infopanel-flags>
+                    <a href="#layout-language=ru" onclick="keytrainer.changeLayout('ru')"><img class="flag-icon" src="./images/ru.png" title="russian keyboard layout"></a>
                 </div>
             </div>
         </div>
