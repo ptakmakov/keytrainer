@@ -207,6 +207,10 @@ function Keyboard() {
                     .forEach((v) => v.toggleKey());
             }
         },
+        /**
+         * Highligt keyboard key
+         * @param {string} char
+         */
         highlightKey(char) {
             this.findKey(char).highlightKey();
         },

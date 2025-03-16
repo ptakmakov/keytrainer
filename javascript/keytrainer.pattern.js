@@ -2,6 +2,13 @@
 import * as css from './keytrainer.css.js';
 import Controls from './keytrainer.controls.js';
 
+/**
+ * Pattern object
+ * Highlight and visualize typing
+ * @returns {Object} Pattern object
+ * @method init() get json, start render
+ * @param {string} data json
+ */
 function Pattern() {
     const controls = new Controls();
     let template = null;
@@ -15,6 +22,11 @@ function Pattern() {
         return (char === ' ') ? '&nbsp;' : char;
     }
     return {
+        /**
+         * Initialize pattern, highlight and visualize
+         * @param {Object} data - Data
+         * @returns {Promise} Promise
+         */
         init(data) {
             return new Promise((resolve) => {
                 position = 0;
@@ -46,6 +58,10 @@ function Pattern() {
                 resolve(next);
             });
         },
+        /**
+         * Render current character after pressing key
+         * @param {string} char - Character
+         */
         renderCurrent(char) {
             const o = template[position];
             position += 1;
@@ -59,6 +75,9 @@ function Pattern() {
             o.charElement.classList.remove(css.highlighted);
             o.charElement.classList.add(css.typed);
         },
+        /**
+         * Render next character
+         */
         renderNext() {
             const o = template[position];
             next = o.char;
@@ -67,7 +86,14 @@ function Pattern() {
             o.charElement.classList.add(css.highlighted);
             o.charElement.innerHTML = underscore(o.char);
         },
+        /**
+         * Check if last character
+         * @returns {boolean} True if last character
+         */
         get isLast() { return position === template.length; },
+        /**
+         * Get next character
+         */
         get next() { return next; },
     };
 }

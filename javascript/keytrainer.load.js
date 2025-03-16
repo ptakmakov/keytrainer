@@ -1,7 +1,7 @@
 /**
- * Load sources for keytrainer
- * @typedef Load
- * @returns {Object} Load
+ * Get JSON from URL
+ * @param {string} url - URL
+ * @param {function} callback - Callback
  */
 function getJSON(url, callback) {
     fetch(url)
@@ -12,9 +12,13 @@ function getJSON(url, callback) {
             return response.json();
         })
         .then((data) => callback(data))
-        // eslint-disable-next-line no-console
-        .catch((error) => console.error('Ошибка при загрузке JSON:', error));
+        .catch((error) => { throw new Error(`Ошибка при загрузке JSON: ${error}`); });
 }
+/**
+ * Load sources for keytrainer
+ * @typedef Load
+ * @returns {Object} Load
+ */
 function Load() {
     return {
         layoutURL: '/json/en.json',

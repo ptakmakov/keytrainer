@@ -8,6 +8,11 @@ const stopwatchSelector = '.stopwatch';
 const speedSelector = '.speed';
 const missprintsSelector = '.missprints';
 const tipsSelector = '.tips';
+/**
+ * Controls return object with document elements for:
+ * keyboard, pattern, keytrainer, stopwatch, speedmeter, missprints and tips
+ * @returns {Object} Controls
+ */
 function Controls() {
     return {
         keyboard: document.querySelector(keyboardSelector),

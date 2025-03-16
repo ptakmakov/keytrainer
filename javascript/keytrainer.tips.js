@@ -1,5 +1,14 @@
 const tipskeys = { newphrase: 'newphrase', missprint: 'missprint', random: 'random' };
 
+/**
+ * Object, for manage tips
+ * @typedef Tips
+ * @returns {Object} Tips object
+ * @method Init() get json, start render
+ * @param {string} src json url
+ * @param {function} callback function called after render completed
+ * @property {array} keys array of Key objects @see Key
+ */
 function Tips() {
     let tips;
     let tip;

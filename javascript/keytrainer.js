@@ -10,9 +10,14 @@ import Pattern from './keytrainer.pattern.js';
 // eslint-disable-next-line import/no-mutable-exports
 let keytrainer;
 
-// Добавим функцию для обработки всех ивентов
+/**
+ * Add events listener to object
+ * @param {object} target any element supports events
+ * @param {Array} events array of event naves
+ * @param {function} listener any function for event
+ */
 function addEventListeners(target, events, listener) {
-    events.split(' ').forEach((event) => target.addEventListener(event, listener));
+    events.forEach((event) => target.addEventListener(event, listener));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,10 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     widthRatio.value = 65;
     screenWidth.value = window.screen.width;
     resize(window.innerWidth);
-    addEventListeners(window, 'keydown keyup', (e) => keytrainer.trackKey(e));
-    addEventListeners(window, 'resize', () => resize(window.innerWidth));
-    // $(window).on('keypress keydown keyup', (e) => keytrainer.trackKey(e));
-    // $(window).on('resize', () => resize(window.innerWidth));
+    addEventListeners(window, ['keydown', 'keyup'], (e) => keytrainer.trackKey(e));
+    addEventListeners(window, ['resize'], () => resize(window.innerWidth));
 });
 
 /**
